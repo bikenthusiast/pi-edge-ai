@@ -1,0 +1,18 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+
+# Model weights: fetched via scripts/fetch_models.sh, never committed
+models/*
+!models/.gitkeep
+!models/manifest.txt
+
+# Runtime state produced on the Pi
+*.db
+*.sqlite3
+events.log
+
+.env
+.DS_Store

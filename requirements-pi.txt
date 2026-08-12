@@ -1,0 +1,7 @@
+# Installed ON THE PI (aarch64). Everything here must have an aarch64 wheel.
+ai-edge-litert>=2.1
+numpy>=1.26
+pillow>=10
+gpiozero>=2.0
+strands-agents>=1.51
+boto3>=1.34

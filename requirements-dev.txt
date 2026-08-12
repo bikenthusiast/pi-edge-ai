@@ -1,0 +1,10 @@
+# Installed ON THE MAC. Never deployed.
+#
+# Deliberately does NOT pull in requirements-pi.txt: ai-edge-litert ships no
+# macOS x86_64 wheels past 1.0.1, and gpiozero is meaningless off-device.
+# Runtime versions are pinned once, in requirements-pi.txt, and verified there.
+numpy>=1.26
+pillow>=10
+boto3>=1.34
+pytest>=8.0
+ruff>=0.6

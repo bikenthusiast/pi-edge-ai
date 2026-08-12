@@ -1,0 +1,5 @@
+# Optional, arm64 Macs only: lets the inference tests run locally instead of
+# skipping. On x86_64 these have no wheels — that is expected, not a failure.
+-r requirements-dev.txt
+ai-edge-litert>=2.1
+strands-agents>=1.51
