@@ -45,7 +45,7 @@ deploy: test  ## sync src/ + models/ to the Pi (runs tests first)
 
 # --- on the Pi, driven from the Mac ---------------------------------------
 run-pi:  ## run the classifier on the Pi over SSH
-	ssh $(PI_HOST) 'cd $(PI_PATH) && .venv/bin/python -m edge.vision.classify tests/fixtures/parrot.jpg'
+	ssh $(PI_HOST) 'cd $(PI_PATH) && .venv/bin/python -m edge.vision.classify samples/parrot.jpg'
 
 ssh:
 	ssh $(PI_HOST)

@@ -20,6 +20,8 @@ rsync -az --delete \
   --include='models/' \
   --include='models/*.tflite' \
   --include='models/*.txt' \
+  --include='samples/' \
+  --include='samples/*.jpg'\
   --include='scripts/' \
   --include='scripts/bootstrap_pi.sh' \
   --include='requirements-pi.txt' \
