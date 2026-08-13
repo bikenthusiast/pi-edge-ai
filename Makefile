@@ -1,9 +1,10 @@
 # Targets are grouped by WHERE they run. Everything above `deploy` is Mac-only.
-.PHONY: help check-python setup models test lint deploy deploy-dry run-pi ssh clean
+.PHONY: help check-python setup models test lint bench bench-pi deploy deploy-dry run-pi test-pi pipeline report ssh clean
 
 PY      ?= python3.12
 PI_HOST ?= pi
 PI_PATH ?= ~/pi-edge-ai
+export PI_HOST PI_PATH
 
 help:
 	@grep -E '^[a-z-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
@@ -36,6 +37,16 @@ test:  ## run the Mac-side test suite (hardware tests skipped)
 lint:
 	.venv/bin/ruff check src tests
 
+bench:  ## compare all models in models/ (needs LiteRT — use bench-pi on Intel Macs)
+	@.venv/bin/python -c "import ai_edge_litert" 2>/dev/null || { \
+	  echo "LiteRT is unavailable here (macOS x86_64 has no wheels)."; \
+	  echo "Run the comparison on the Pi instead:  make bench-pi"; \
+	  exit 1; }
+	.venv/bin/python -m edge.vision.benchmark models/*.tflite --runs 20
+
+bench-pi:  ## the same comparison on the Pi, where the numbers count
+	ssh $(PI_HOST) 'cd $(PI_PATH) && .venv/bin/python -m edge.vision.benchmark models/*.tflite --runs 20'
+
 # --- Mac -> Pi -------------------------------------------------------------
 deploy-dry:  ## show what deploy would copy, without copying
 	bash scripts/deploy.sh --dry-run --itemize-changes
@@ -46,6 +57,16 @@ deploy: test  ## sync src/ + models/ to the Pi (runs tests first)
 # --- on the Pi, driven from the Mac ---------------------------------------
 run-pi:  ## run the classifier on the Pi over SSH
 	ssh $(PI_HOST) 'cd $(PI_PATH) && .venv/bin/python -m edge.vision.classify samples/parrot.jpg'
+
+test-pi:  ## run the full suite ON the Pi, including hardware tests
+	ssh $(PI_HOST) 'cd $(PI_PATH) && .venv/bin/python -m pytest -q -m "not hardware"'
+	ssh $(PI_HOST) 'cd $(PI_PATH) && .venv/bin/python -m pytest -q -m hardware'
+
+pipeline:  ## run the live pipeline on the Pi for 60 s
+	ssh $(PI_HOST) 'cd $(PI_PATH) && .venv/bin/python -m edge.vision.pipeline --max-seconds 60'
+
+report:  ## show the last 24 h of events from the Pi
+	ssh $(PI_HOST) 'cd $(PI_PATH) && .venv/bin/python -m edge.events.report --hours 24'
 
 ssh:
 	ssh $(PI_HOST)

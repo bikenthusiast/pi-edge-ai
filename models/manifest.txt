@@ -1,3 +1,4 @@
 # filename                            url
+mobilenet_v1_0.25_128_quant.tflite    https://github.com/google-coral/test_data/raw/master/mobilenet_v1_0.25_128_quant.tflite
 mobilenet_v2_1.0_224_quant.tflite     https://github.com/google-coral/test_data/raw/master/mobilenet_v2_1.0_224_quant.tflite
 imagenet_labels.txt                   https://github.com/google-coral/test_data/raw/master/imagenet_labels.txt

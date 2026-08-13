@@ -1,5 +1,52 @@
 # pi-edge-ai
 
+### Project Goal
+
+
+### Hardware list
+| Component | Specification |required|
+|---|---|---|
+| Raspberry Pi 4 B ||:heavy_check_mark:|                             |
+| Power supply ||:heavy_check_mark: |
+| Storage	microSD (A2) or USB-3 SSD| ≥ 16 GB free|:heavy_check_mark: |
+| Operating system | Raspberry Pi OS 64-bit (Trixie), Desktop or Lite|:heavy_check_mark: |
+| USB webcam | UVC-compatible (any standard webcam)|:heavy_check_mark: |
+
+### Check the system (Raspberry Pi)
+ssh to the pi
+
+```bash
+uname -m                      # must print aarch64, not armv7l
+python3 --version             # e.g. Python 3.13.5
+ldd --version | head -1       # glibc must be ≥ 2.27
+free -h                       # available RAM
+```
+If `uname -m` shows **armv7l**, you're on a 32-bit OS. There are no 32-bit wheels for `ai-edge-litert` — that means a reinstall with the 64-bit image.
+
+### Update the system
+Update the system and install the base packages:
+
+```bash
+sudo apt update && sudo apt full-upgrade -y
+sudo apt install -y python3-venv python3-opencv python3-picamera2 v4l-utils
+```
+### Check the camera
+## 4. Step 1 — Check the camera
+
+Plug in the USB webcam, then:
+
+```bash
+v4l2-ctl --list-devices
+```
+
+Your webcam should show up as `/dev/video0` (sometimes `/dev/video1`). Also inspect the supported formats:
+
+```bash
+v4l2-ctl -d /dev/video0 --list-formats-ext
+```
+
+What matters is that **MJPG** is in the list. With YUYV only, a 640×480 webcam on the Pi often manages just 5–10 FPS because USB bandwidth becomes the limit.
+
 Edge-AI-Pipeline auf einem Raspberry Pi 4 B mit Bedrock-gestütztem Agenten.
 
 Ein Repository, vier Zonen: entwickelt wird auf dem Mac, deployt wird eine
