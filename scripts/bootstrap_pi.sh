@@ -18,6 +18,7 @@ python3 -m venv --system-site-packages .venv
 .venv/bin/pip install -U pip
 .venv/bin/pip install -r requirements-pi.txt
 .venv/bin/pip install -e . --no-deps        # makes `python -m edge.…` work
+.venv/bin/pip install pytest                # for `make test-pi`
 
 .venv/bin/python -c "import cv2, numpy; print('OpenCV', cv2.__version__)"
 .venv/bin/python -c "from ai_edge_litert.interpreter import Interpreter; print('LiteRT ready')"

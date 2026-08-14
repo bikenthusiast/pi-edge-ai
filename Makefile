@@ -10,7 +10,10 @@ help:
 	@grep -E '^[a-z-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
 	 awk 'BEGIN{FS=":.*?## "}{printf "  \033[36m%-12s\033[0m %s\n", $$1, $$2}'
 
-# --- Mac -------------------------------------------------------------------
+######################
+#  Workflow for Mac  #
+######################
+
 check-python:
 	@command -v $(PY) >/dev/null 2>&1 || { \
 	  printf 'Error: %s not found.\n  uv python install 3.12\n  make setup PY=$$(uv python find 3.12)\n' '$(PY)'; \
@@ -34,7 +37,7 @@ models:  ## download model weights (not in git)
 test:  ## run the Mac-side test suite (hardware tests skipped)
 	.venv/bin/python -m pytest -q
 
-lint:
+lint: 
 	.venv/bin/ruff check src tests
 
 bench:  ## compare all models in models/ (needs LiteRT — use bench-pi on Intel Macs)
@@ -44,8 +47,6 @@ bench:  ## compare all models in models/ (needs LiteRT — use bench-pi on Intel
 	  exit 1; }
 	.venv/bin/python -m edge.vision.benchmark models/*.tflite --runs 20
 
-bench-pi:  ## the same comparison on the Pi, where the numbers count
-	ssh $(PI_HOST) 'cd $(PI_PATH) && .venv/bin/python -m edge.vision.benchmark models/*.tflite --runs 20'
 
 # --- Mac -> Pi -------------------------------------------------------------
 deploy-dry:  ## show what deploy would copy, without copying
@@ -54,7 +55,17 @@ deploy-dry:  ## show what deploy would copy, without copying
 deploy: test  ## sync src/ + models/ to the Pi (runs tests first)
 	bash scripts/deploy.sh
 
-# --- on the Pi, driven from the Mac ---------------------------------------
+clean:
+	find . -name __pycache__ -type d -exec rm -rf {} + 2>/dev/null || true
+	rm -rf .pytest_cache .ruff_cache
+
+###############################
+#  Workflow for Raspberry Pi  #
+###############################
+
+bench-pi:  ## compare all models in models
+	ssh $(PI_HOST) 'cd $(PI_PATH) && .venv/bin/python -m edge.vision.benchmark models/*.tflite --runs 20'
+
 run-pi:  ## run the classifier on the Pi over SSH
 	ssh $(PI_HOST) 'cd $(PI_PATH) && .venv/bin/python -m edge.vision.classify samples/parrot.jpg'
 
@@ -62,7 +73,7 @@ test-pi:  ## run the full suite ON the Pi, including hardware tests
 	ssh $(PI_HOST) 'cd $(PI_PATH) && .venv/bin/python -m pytest -q -m "not hardware"'
 	ssh $(PI_HOST) 'cd $(PI_PATH) && .venv/bin/python -m pytest -q -m hardware'
 
-pipeline:  ## run the live pipeline on the Pi for 60 s
+pipeline:  ## run the live pipeline ON the Pi for 60 s
 	ssh $(PI_HOST) 'cd $(PI_PATH) && .venv/bin/python -m edge.vision.pipeline --max-seconds 60'
 
 report:  ## show the last 24 h of events from the Pi
@@ -70,7 +81,3 @@ report:  ## show the last 24 h of events from the Pi
 
 ssh:
 	ssh $(PI_HOST)
-
-clean:
-	find . -name __pycache__ -type d -exec rm -rf {} + 2>/dev/null || true
-	rm -rf .pytest_cache .ruff_cache
