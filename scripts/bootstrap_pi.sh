@@ -10,7 +10,8 @@ if [[ "$(uname -m)" != "aarch64" ]]; then
 fi
 
 sudo apt-get update
-sudo apt-get install -y python3-venv python3-opencv v4l-utils
+sudo apt-get install -y python3-venv python3-opencv v4l-utils \
+  mosquitto mosquitto-clients   # MQTT broker + CLI, see docs/mqtt.md
 
 # --system-site-packages is what makes the apt build of OpenCV (and picamera2)
 # visible inside the venv. Without it you would rebuild OpenCV via pip.
