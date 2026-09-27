@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import threading
 import time
+import warnings
 from dataclasses import dataclass
 from typing import Self
 
@@ -30,10 +31,19 @@ class CameraStream:
     overlap instead of stacking.
     """
 
+    # A UVC webcam can report "busy" for a few seconds after the previous
+    # user closed it or after a format change. ~5 s covers that window.
+    OPEN_ATTEMPTS = 10
+    OPEN_RETRY_DELAY_S = 0.5
+    # cap.read() can block up to ~10 s in the V4L2 backend; wait longer than
+    # that before giving up on the reader thread.
+    JOIN_TIMEOUT_S = 12.0
+
     def __init__(self, index: int = 0, width: int = 640, height: int = 480,
                  fps: int = 30, fourcc: str = "MJPG"):
         try:
-            import cv2
+            # Absent on the Mac by design: the Pi gets OpenCV from apt, not pip.
+            import cv2  # pyright: ignore[reportMissingImports]
         except ImportError as exc:  # pragma: no cover - platform dependent
             raise CameraError(
                 "OpenCV is not available. On the Pi install it via apt "
@@ -42,31 +52,62 @@ class CameraStream:
             ) from exc
 
         self._cv2 = cv2
-        self.cap = cv2.VideoCapture(index, cv2.CAP_V4L2)
-        # MJPG matters: with raw YUYV a 640x480 webcam is limited by USB
-        # bandwidth to roughly 5-10 FPS.
-        self.cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*fourcc))
-        self.cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
-        self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
-        self.cap.set(cv2.CAP_PROP_FPS, fps)
-        # Queue depth 1: always hand out the freshest frame, never a stale one.
-        self.cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
-
-        if not self.cap.isOpened():
-            raise CameraError(
-                f"Could not open camera {index}. Check `v4l2-ctl --list-devices` "
-                "and that your user is in the 'video' group."
-            )
+        self._thread: threading.Thread | None = None
+        cap = self._open(index, width, height, fps, fourcc)
+        self.cap = cap
 
         self._frame = None
         self._running = True
         self._lock = threading.Lock()
-        self._thread = threading.Thread(target=self._update, daemon=True)
+        # The thread gets its own reference: release() sets self.cap to None,
+        # but only after this thread has stopped using it.
+        self._thread = threading.Thread(target=self._update, args=(cap,),
+                                        daemon=True, name=f"camera{index}")
         self._thread.start()
 
-    def _update(self) -> None:
+    def _open(self, index: int, width: int, height: int, fps: int,
+              fourcc: str):
+        cv2 = self._cv2
+        # MJPG matters: with raw YUYV a 640x480 webcam is limited by USB
+        # bandwidth to roughly 5-10 FPS.
+        # Passing format and size AT OPEN negotiates the stream once. Setting
+        # them afterwards via cap.set() renegotiates per property, which costs
+        # seconds on UVC webcams and leaves the device briefly unresponsive.
+        params = [
+            cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*fourcc),
+            cv2.CAP_PROP_FRAME_WIDTH, width,
+            cv2.CAP_PROP_FRAME_HEIGHT, height,
+        ]
+
+        for _ in range(self.OPEN_ATTEMPTS):
+            try:
+                cap = cv2.VideoCapture(index, cv2.CAP_V4L2, params)
+            except (TypeError, cv2.error):
+                # OpenCV < 4.5.2, or backend rejects open-time params.
+                cap = cv2.VideoCapture(index, cv2.CAP_V4L2)
+                cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*fourcc))
+                cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
+                cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
+
+            if cap.isOpened():
+                cap.set(cv2.CAP_PROP_FPS, fps)
+                # Queue depth 1: always hand out the freshest frame.
+                cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
+                return cap
+
+            cap.release()
+            time.sleep(self.OPEN_RETRY_DELAY_S)
+
+        raise CameraError(
+            f"Could not open camera {index} after "
+            f"{self.OPEN_ATTEMPTS * self.OPEN_RETRY_DELAY_S:.0f}s. "
+            "Check `v4l2-ctl --list-devices`, that your user is in the "
+            "'video' group, and `sudo fuser -v /dev/video*` for other users."
+        )
+
+    def _update(self, cap) -> None:
         while self._running:
-            ok, frame = self.cap.read()
+            ok, frame = cap.read()
             if ok:
                 with self._lock:
                     self._frame = frame
@@ -88,9 +129,21 @@ class CameraStream:
         raise CameraError(f"No frame within {timeout:.0f}s — is the device busy?")
 
     def release(self) -> None:
+        """Stop the reader and close the device. Safe to call twice."""
         self._running = False
-        self._thread.join(timeout=1.0)
-        self.cap.release()
+        if self._thread is not None:
+            self._thread.join(timeout=self.JOIN_TIMEOUT_S)
+            if self._thread.is_alive():
+                # Releasing while read() is still running races the driver.
+                # Leave the device to the OS on process exit instead.
+                warnings.warn("camera reader thread did not stop; "
+                              "device not released", RuntimeWarning,
+                              stacklevel=2)
+                return
+            self._thread = None
+        if self.cap is not None:
+            self.cap.release()
+            self.cap = None
 
     def __enter__(self) -> Self:
         return self
@@ -150,7 +203,7 @@ class Debouncer:
                 self._last_seen = now
                 self._peak_score = max(self._peak_score, score)
             elif now - self._last_seen >= self.cooldown_s:
-                return self._close(now)
+                return self._close(self._active, now)
             return None
 
         # No episode running: count consecutive frames above the entry bar.
@@ -180,11 +233,13 @@ class Debouncer:
         """Close any open episode — call this when the loop shuts down."""
         if self._active is None:
             return None
-        return self._close(time.monotonic() if now is None else now)
+        return self._close(self._active, time.monotonic() if now is None else now)
 
-    def _close(self, now: float) -> Detection:
+    def _close(self, label: str, now: float) -> Detection:
+        # `label` is the active label, passed in by callers that have already
+        # checked it is not None — so the type checker can see that too.
         detection = Detection(
-            label=self._active,
+            label=label,
             # Peak, not last or mean: the log should answer "how sure were we
             # at best", and a mean would be dragged down by the fade-out.
             score=self._peak_score,
