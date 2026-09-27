@@ -57,16 +57,38 @@ flowchart LR
   versioned JSON schema, retained state and a Last Will, so a display knows
   both *what is in view* and *whether the Pi is alive*.
 
-## Results
-
-<!-- Fill in from `make bench-pi` before sharing the repo. -->
+## Performance
 
 Median latency on a Raspberry Pi 4 B, 4 threads, XNNPACK, after warm-up:
 
 | Model | Input | Size | Median | p95 | FPS |
 |---|---|---|---|---|---|
-| MobileNet v2 1.0 (uint8) | 224×224 | — | — | — | — |
-| MobileNet v1 0.25 (uint8) | 128×128 | — | — | — | — |
+| MobileNet v2 1.0 (uint8) | 224×224 | 3,526 KB | 17.4 ms | 20.2 ms | 57.5 |
+| MobileNet v1 0.25 (uint8) | 128×128 | 513 KB | 1.4 ms | 1.5 ms | 713.6 |
+
+MobileNet v1 0.25 is ~12.4× faster, but agrees with v2 on only 4 of 5 sample
+images and with far lower confidence (28–86 % vs. 64–100 %). v2 stays the
+default. Agreement is not accuracy; see `edge/vision/benchmark.py`.
+
+**With MagicMirror running on the same Pi**, inference roughly halves and gets
+noisier, because the mirror's Electron UI competes for the same four cores:
+
+| Model | Median | p95 | FPS | Median range (3 runs) |
+|---|---|---|---|---|
+| MobileNet v2 1.0 (uint8) | 32.2 ms | 42.8 ms | 31.0 | 29.9–49.0 ms |
+| MobileNet v1 0.25 (uint8) | 2.0 ms | 4.3 ms | 510.3 | 1.9–3.0 ms |
+
+FPS here is pure inference (`1000 / median`). The end-to-end live pipeline
+(webcam 640×480 → preprocessing → v2 → debouncer → SQLite/MQTT) runs at
+~13–14 FPS with MagicMirror stopped.
+
+**Measurement conditions:** `make bench-pi` (5 sample images × 20 runs =
+100 inferences per model, `fit=crop`), 3 runs 30 s apart per condition; the
+tables show the middle run. Raspberry Pi 4 Model B Rev 1.4, active cooling
+(fan), no throttling (`vcgencmd get_throttled` = 0x0 after the runs).
+Debian GNU/Linux 13 (trixie), Python 3.13.5, ai-edge-litert 2.2.0,
+measured 2026-09-27. With MagicMirror stopped, the median varied by <1 %
+between runs.
 
 ## Hardware
 
