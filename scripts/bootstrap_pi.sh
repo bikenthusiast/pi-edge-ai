@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # One-time setup ON THE PI. Run once after the first deploy.
-#   ssh pi 'cd pi-edge-ai && bash scripts/bootstrap_pi.sh'
+#   make bootstrap-pi        (on the Mac; host and path come from pi.env)
 set -euo pipefail
 
 cd "$(dirname "$0")/.."

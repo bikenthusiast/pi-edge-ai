@@ -11,8 +11,12 @@
 # happily drag __pycache__ and *.egg-info along.
 set -euo pipefail
  
-HOST="${PI_HOST:-pi}"                 # matches the Host entry in ~/.ssh/config
-REMOTE="${PI_PATH:-pi-edge-ai}"
+cd "$(dirname "$0")/.."               # rsync below syncs ./ — the repo root
+
+# Values from the caller win (make exports them); pi.env is the fallback for
+# running this script directly. The subshell keeps pi.env from clobbering them.
+HOST="${PI_HOST:-$(. ./pi.env && echo "$PI_HOST")}"
+REMOTE="${PI_PATH:-$(. ./pi.env && echo "$PI_PATH")}"
  
 echo "Deploying to ${HOST}:${REMOTE}"
  

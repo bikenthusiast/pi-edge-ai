@@ -1,13 +1,12 @@
 # Targets are grouped by WHERE they run. Everything above `deploy` is Mac-only.
-.PHONY: help check-python setup models test lint bench bench-pi deploy deploy-dry run-pi test-pi pipeline pipeline-mqtt mqtt-watch report ssh clean
+.PHONY: help check-python setup models test lint bench bootstrap-pi bench-pi deploy deploy-dry run-pi test-pi pipeline pipeline-mqtt mqtt-watch report ssh clean
 
 PY      ?= python3.12
-PI_HOST ?= pi
-PI_PATH ?= ~/pi-edge-ai
+include pi.env      # PI_HOST, PI_PATH — edit there, not here
 export PI_HOST PI_PATH
 
 help:
-	@grep -E '^[a-z-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
+	@grep -hE '^[a-z-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
 	 awk 'BEGIN{FS=":.*?## "}{printf "  \033[36m%-12s\033[0m %s\n", $$1, $$2}'
 
 ######################
@@ -62,6 +61,9 @@ clean:
 ###############################
 #  Workflow for Raspberry Pi  #
 ###############################
+
+bootstrap-pi:  ## one-time setup on the Pi, after the first deploy
+	ssh $(PI_HOST) 'cd $(PI_PATH) && bash scripts/bootstrap_pi.sh'
 
 bench-pi:  ## compare all models in models
 	ssh $(PI_HOST) 'cd $(PI_PATH) && .venv/bin/python -m edge.vision.benchmark models/*.tflite --runs 20'

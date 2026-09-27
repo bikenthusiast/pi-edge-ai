@@ -8,7 +8,7 @@ git add -A && git commit -m "initial" && git push
 
 make deploy-dry                               # Filter prüfen
 make deploy                                   # rsync zum Pi
-ssh pi 'cd pi-edge-ai && bash scripts/bootstrap_pi.sh'
+make bootstrap-pi                             # einmalig: Setup auf dem Pi
 make run-pi                                   # Gegenprobe
 ```
 

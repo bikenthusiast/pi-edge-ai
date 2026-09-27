@@ -87,11 +87,11 @@ make models       # download weights listed in models/manifest.txt
 make test         # hardware-free test suite
 ```
 
-First deployment to the Pi (SSH host alias `pi`):
+First deployment to the Pi (set its SSH host and project path in `pi.env`):
 
 ```bash
 make deploy                                        # runs the tests, then rsync
-ssh pi 'cd pi-edge-ai && bash scripts/bootstrap_pi.sh'
+make bootstrap-pi                                  # one-time setup on the Pi
 make run-pi                                        # classify a sample image
 ```
 
