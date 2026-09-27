@@ -3,7 +3,7 @@
 
 PY      ?= python3.12
 include pi.env      # PI_HOST, PI_PATH — edit there, not here
-export PI_HOST PI_PATH
+export PI_HOST PI_PATH PREVIEW_PORT
 
 help:
 	@grep -hE '^[a-z-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
@@ -80,6 +80,9 @@ pipeline:  ## run the live pipeline ON the Pi for 60 s
 
 pipeline-mqtt:  ## run the live pipeline ON the Pi for 60 s and publish via MQTT
 	ssh $(PI_HOST) 'cd $(PI_PATH) && .venv/bin/python -m edge.vision.pipeline --max-seconds 60 --mqtt-host localhost'
+
+pipeline-preview:  ## 60 s live pipeline + MQTT + browser preview at http://localhost:$(PREVIEW_PORT)
+	ssh -L $(PREVIEW_PORT):localhost:$(PREVIEW_PORT) $(PI_HOST) 'cd $(PI_PATH) && .venv/bin/python -m edge.vision.pipeline --max-seconds 60 --mqtt-host localhost --preview-port $(PREVIEW_PORT)'
 
 mqtt-watch:  ## follow all edge/# MQTT messages on the Pi's broker
 	ssh -t $(PI_HOST) 'mosquitto_sub -h localhost -t "edge/#" -v'

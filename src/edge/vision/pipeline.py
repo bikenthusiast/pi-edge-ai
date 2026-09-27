@@ -33,6 +33,7 @@ from edge.events.publisher import (
 )
 from edge.events.store import EventStore
 from edge.vision.camera import CameraError, CameraStream, Debouncer, Detection
+from edge.vision.preview import PreviewServer
 from edge.vision.model import (
     DEFAULT_LABELS,
     DEFAULT_MODEL,
@@ -81,6 +82,9 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
                         help="device name in the MQTT topics: edge/<device>/…")
     parser.add_argument("--max-seconds", type=float,
                         help="stop after N seconds (useful for smoke tests)")
+    parser.add_argument("--preview-port", type=int,
+                        help="serve an annotated MJPEG preview on "
+                             "127.0.0.1:<port> (tunnel it via ssh -L)")
     parser.add_argument("--quiet", action="store_true")
     return parser.parse_args(argv)
 
@@ -123,6 +127,18 @@ def main(argv: list[str] | None = None) -> int:
         publisher.close()
         return 1
 
+    preview = None
+    if args.preview_port:
+        try:
+            preview = PreviewServer(args.preview_port)
+        except OSError as exc:
+            print(f"Error: preview port {args.preview_port}: {exc}",
+                  file=sys.stderr)
+            stream.release()
+            store.close()
+            publisher.close()
+            return 1
+
     frames = 0
     started = time.monotonic()
     model_name = Path(args.model).name
@@ -159,6 +175,9 @@ def main(argv: list[str] | None = None) -> int:
         if args.mqtt_host:
             print(f"MQTT  : {args.mqtt_host}:{args.mqtt_port} "
                   f"→ edge/{args.device}/…")
+        
+        if preview is not None:
+            print(f"Preview: http://localhost:{args.preview_port}")
 
     try:
         while not lifecycle.stop:
@@ -182,6 +201,12 @@ def main(argv: list[str] | None = None) -> int:
             event = debouncer.update(labels[best], float(scores[best]))
             frames += 1
             update_presence()
+            if preview is not None:
+                top = np.argsort(scores)[::-1][:3]
+                preview.update(frame,
+                               [(labels[k], float(scores[k])) for k in top],
+                               threshold=args.min_score,
+                               active=debouncer.active_label)
 
             if event is not None:
                 log_event(event)
@@ -194,6 +219,8 @@ def main(argv: list[str] | None = None) -> int:
             log_event(final)
         update_presence()
     finally:
+        if preview is not None:
+            preview.close()
         stream.release()
         publisher.close()
         elapsed = time.monotonic() - started
