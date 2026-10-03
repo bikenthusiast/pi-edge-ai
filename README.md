@@ -135,6 +135,7 @@ To check the camera on the Pi: `v4l2-ctl --list-devices` and
 ```
 src/edge/vision/    model loading, preprocessing, camera, live pipeline, benchmark
 src/edge/events/    SQLite event log, CLI report, MQTT publisher
+src/edge/gesture/   8×8 depth frames → swipe gestures (synthetic, replay, SEN0628)
 src/edge/agent/     Strands tools for the Bedrock agent (in progress)
 tests/              runs on the Mac; hardware-marked tests run on the Pi
 scripts/            deploy, one-time Pi bootstrap, model download
@@ -147,12 +148,15 @@ docs/mqtt.md        MQTT topics, payload schema, broker setup
 - [ADR 0001](docs/adr/0001-litert-statt-tflite-runtime.md) — LiteRT instead of `tflite-runtime`
 - [ADR 0002](docs/adr/0002-agent-laeuft-auf-dem-pi.md) — the agent loop runs on the Pi, not in Lambda
 - [ADR 0003](docs/adr/0003-mqtt-als-event-schnittstelle.md) — MQTT as the event interface to other devices
+- [ADR 0004](docs/adr/0004-gesten-als-edge-events.md) — gesture recognition lives here and is published as an edge event
 
 ## Roadmap
 
 - [x] Classification CLI and model benchmark on the Pi
 - [x] Live pipeline with debouncing and SQLite event log
 - [x] MQTT interface and MagicMirror module
+- [x] Gesture pipeline with synthetic and replay sources, rule-based classifier, `edge/<device>/gesture`
+- [ ] SEN0628 adapter on UART5, recorded swipes as test fixtures
 - [ ] Strands agent with tools over the event log, backed by Bedrock
 - [ ] systemd service with journald logging and a nightly prune timer
 - [ ] Additional sensors (PIR, environment) as event sources

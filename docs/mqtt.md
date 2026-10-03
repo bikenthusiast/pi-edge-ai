@@ -15,6 +15,7 @@ hostname (`--device` overrides it).
 | `events` | no | an episode closes | one detection, same data as the SQLite row |
 | `presence` | yes | an episode opens or closes | what is in view right now |
 | `status` | yes | connect, clean shutdown, or crash (Last Will) | `{"online": …}` |
+| `gesture` | no | a gesture was recognised (`edge.gesture.run`) | one gesture, same data as the SQLite row |
 
 `presence` is retained so that a mirror booting later still knows the current
 state. After a crash it can be stale — consumers must treat it as valid only
@@ -37,11 +38,36 @@ not know rather than guess.
 
 // edge/<device>/status
 {"v":1,"online":true}
+
+// edge/<device>/gesture
+{"v":1,"id":7,"ts":"2026-10-03T08:30:00.000+00:00","gesture":"swipe_up",
+ "confidence":0.857,"source":"sen0628","duration_ms":466.7,"model":"rules-v1"}
 ```
 
 `id` and `ts` match the row in `events.db`, so a consumer can always fetch
 more detail from the log. `ts` of an event is when the episode *closed*; it
 started `duration_ms` earlier. `score` is the peak score of the episode.
+
+### Gesture topic (schema v1)
+
+Added in [ADR 0004](adr/0004-gesten-als-edge-events.md). Rules for consumers:
+
+- `gesture` is one of `swipe_left`, `swipe_right`, `swipe_up`, `swipe_down`.
+  Ignore names you do not know — new ones may be added without a version bump;
+  removing or renaming one bumps `v`.
+- Directions are from the point of view of the person in front of the mirror,
+  after the producer's `--rotate`/`--mirror` calibration.
+- **Not retained.** A gesture is a command for *now*. Consumers should also drop
+  messages older than a few seconds: QoS 1 redelivers after a reconnect, and a
+  replayed swipe would open a page nobody asked for.
+- `id` is unique per device (the SQLite row id) — use it to drop duplicates.
+- Act only while `status.online` is `true` for the same device.
+- `source` tells real sensor input (`sen0628`) from test input (`synthetic`,
+  `replay`). Consumers may choose to ignore test sources in production.
+
+The canonical example payload is `tests/fixtures/contract/gesture_v1.json`. The
+MagicMirror repository keeps an identical copy and tests its bridge against it;
+change both together.
 
 ## Broker setup on the Pi
 
@@ -84,6 +110,7 @@ These files stay on the Pi and are never committed.
 ```bash
 make pipeline-mqtt     # 60 s run on the Pi, publishing to localhost
 make mqtt-watch        # follow edge/# on the Pi
+make gesture-sim GESTURE=swipe_up   # publish one synthetic gesture from the Pi
 ```
 
 If the pipeline connects to a broker that requires credentials, pass them via

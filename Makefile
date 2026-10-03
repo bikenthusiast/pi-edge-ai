@@ -1,5 +1,5 @@
 # Targets are grouped by WHERE they run. Everything above `deploy` is Mac-only.
-.PHONY: help check-python setup models test lint bench bootstrap-pi bench-pi deploy deploy-dry run-pi test-pi pipeline pipeline-mqtt mqtt-watch report ssh clean
+.PHONY: help check-python setup models test lint bench bootstrap-pi bench-pi deploy deploy-dry run-pi test-pi pipeline pipeline-mqtt mqtt-watch gesture-sim report ssh clean
 
 PY      ?= python3.12
 include pi.env      # PI_HOST, PI_PATH — edit there, not here
@@ -83,6 +83,10 @@ pipeline-mqtt:  ## run the live pipeline ON the Pi for 60 s and publish via MQTT
 
 pipeline-preview:  ## 60 s live pipeline + MQTT + browser preview at http://localhost:$(PREVIEW_PORT)
 	ssh -L $(PREVIEW_PORT):localhost:$(PREVIEW_PORT) $(PI_HOST) 'cd $(PI_PATH) && .venv/bin/python -m edge.vision.pipeline --max-seconds 60 --mqtt-host localhost --preview-port $(PREVIEW_PORT)'
+
+GESTURE ?= swipe_up
+gesture-sim:  ## play synthetic gesture(s) ON the Pi and publish them, e.g. GESTURE=swipe_up,swipe_down
+	ssh $(PI_HOST) 'cd $(PI_PATH) && .venv/bin/python -m edge.gesture.run --source synthetic --script $(GESTURE) --realtime --mqtt-host localhost'
 
 mqtt-watch:  ## follow all edge/# MQTT messages on the Pi's broker
 	ssh -t $(PI_HOST) 'mosquitto_sub -h localhost -t "edge/#" -v'
