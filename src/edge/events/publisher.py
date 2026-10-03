@@ -7,6 +7,7 @@ pipeline keeps running and every event is still in events.db (see ADR 0003).
 Topics, all under ``<prefix>/<device>/``:
 
     events    one message per closed episode          QoS 1, not retained
+    gesture   one message per recognised gesture      QoS 1, not retained
     presence  what is in view right now, or nothing   QoS 1, retained
     status    {"online": true|false}, false via LWT   QoS 1, retained
 
@@ -76,6 +77,28 @@ def presence_payload(*, label: str | None, source: str, ts: datetime) -> str:
     })
 
 
+# Known gesture names. A producer must not invent new ones silently: adding a
+# name is a contract change (docs/mqtt.md), even though consumers are required
+# to ignore names they do not know.
+GESTURES = ("swipe_left", "swipe_right", "swipe_up", "swipe_down")
+
+
+def gesture_payload(*, event_id: int, ts: datetime, gesture: str,
+                    confidence: float, source: str, duration_ms: float | None,
+                    model: str | None) -> str:
+    if gesture not in GESTURES:
+        raise ValueError(f"unknown gesture {gesture!r}; known: {GESTURES}")
+    return _dump({
+        "id": event_id,
+        "ts": _iso(ts),
+        "gesture": gesture,
+        "confidence": round(float(confidence), 4),
+        "source": source,
+        "duration_ms": None if duration_ms is None else round(duration_ms, 1),
+        "model": model,
+    })
+
+
 def status_payload(online: bool) -> str:
     return _dump({"online": online})
 
@@ -91,6 +114,9 @@ class NullPublisher:
         pass
 
     def publish_presence(self, **_fields: Any) -> None:
+        pass
+
+    def publish_gesture(self, **_fields: Any) -> None:
         pass
 
     def close(self) -> None:
@@ -111,6 +137,7 @@ class MqttPublisher:
         self.events_topic = topic(device, "events", prefix)
         self.presence_topic = topic(device, "presence", prefix)
         self.status_topic = topic(device, "status", prefix)
+        self.gesture_topic = topic(device, "gesture", prefix)
 
         if client is None:
             try:
@@ -153,6 +180,12 @@ class MqttPublisher:
         # Retained: a mirror that boots later still learns what is in view.
         self._client.publish(self.presence_topic, presence_payload(**fields),
                              qos=1, retain=True)
+
+    def publish_gesture(self, **fields: Any) -> None:
+        # Not retained: a gesture is a command for "now". A mirror that boots
+        # later must not replay the last swipe and open the guest page.
+        self._client.publish(self.gesture_topic, gesture_payload(**fields),
+                             qos=1, retain=False)
 
     def close(self, timeout: float = 2.0) -> None:
         info = self._client.publish(self.status_topic, status_payload(False),
