@@ -10,7 +10,8 @@ Design notes
 * Timestamps are stored as ISO-8601 UTC strings. SQLite has no date type, and
   text sorts correctly in this format — unlike Unix floats, it stays readable
   when a human (or an LLM) reads the table directly.
-* WAL mode so a reader (the agent) never blocks the writer (the vision loop).
+* WAL mode so a reader (the report CLI now, the planned agent later) never
+  blocks the writer (the vision loop).
 """
 
 from __future__ import annotations
@@ -133,7 +134,7 @@ class EventStore:
               until: datetime | None = None, label: str | None = None,
               model: str | None = None,
               min_score: float = 0.0, limit: int = 100) -> list[Event]:
-        """Fetch events, newest first. This is what the agent's tool calls."""
+        """Fetch events, newest first. The planned agent's tool will call this."""
         sql = ["SELECT * FROM events WHERE score >= ?"]
         params: list[object] = [min_score]
 

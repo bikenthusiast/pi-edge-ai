@@ -1,5 +1,9 @@
 tree structure
 
+Strukturentwurf vom August 2026, seitdem nicht nachgeführt. Das aktuelle Layout
+steht in der README unter „Project layout“. Einträge mit „geplant“ existieren
+noch nicht.
+
 pi-edge-ai/
 ├── README.md                      # Einstieg, Architekturbild, Ergebnisse
 ├── Makefile                       # setup · test · deploy · run-pi
@@ -28,13 +32,13 @@ pi-edge-ai/
 │   │   └── camera.py              # braucht Hardware
 │   ├── events/
 │   │   └── store.py               # SQLite-Eventlog
-│   └── agent/
-│       └── tools.py               # Strands-Tools → rufen Bedrock
+│   └── agent/                     # Platzhalter, nur leere __init__.py
+│       └── tools.py               # geplant: Strands-Tools → rufen Bedrock
 │
 ├── tests/                         # läuft auf dem Mac, nie deployt
 │   ├── test_vision.py
 │   └── fixtures/
 │
-└── infra/                         # IAM, Knowledge Base — Mac → AWS
+└── infra/                         # geplant: IAM, Knowledge Base — Mac → AWS
     ├── iam/
     └── knowledge_base/

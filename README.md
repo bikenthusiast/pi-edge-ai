@@ -36,7 +36,7 @@ flowchart LR
 | Mac | everything | `git clone` |
 | Git | everything except model weights and secrets | `git push` |
 | Pi | `src/`, `models/`, `tests/`, runtime requirements | `make deploy` (rsync filter) |
-| AWS | no files, API calls only | from the Pi at runtime |
+| AWS (planned) | no files, API calls only | from the Pi at runtime, once the agent exists |
 
 ## Highlights
 
