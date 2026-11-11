@@ -1,6 +1,6 @@
 # ADR 0003 — MQTT als Event-Schnittstelle zu anderen Geräten
 
-**Status:** vorgeschlagen · **Datum:** 2026-09
+**Status:** akzeptiert · **Datum:** 2026-09
 
 ## Kontext
 Ein zweites Projekt, ein MagicMirror mit Sensorerkennung, soll anzeigen, was
