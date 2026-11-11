@@ -35,8 +35,8 @@ CREATE TABLE IF NOT EXISTS events (
     note        TEXT
 );
 
--- The agent's most common query is "what happened between X and Y",
--- so ts leads every index.
+-- The most common query (the report CLI today, the planned agent later) is
+-- "what happened between X and Y", so ts leads every index.
 CREATE INDEX IF NOT EXISTS idx_events_ts        ON events (ts);
 CREATE INDEX IF NOT EXISTS idx_events_label_ts  ON events (label, ts);
 """
