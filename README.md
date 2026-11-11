@@ -148,7 +148,7 @@ docs/mqtt.md        MQTT topics, payload schema, broker setup
 
 - [ADR 0001](docs/adr/0001-litert-statt-tflite-runtime.md) — LiteRT instead of `tflite-runtime`
 - [ADR 0002](docs/adr/0002-agent-laeuft-auf-dem-pi.md) — the agent loop runs on the Pi, not in Lambda (proposed)
-- [ADR 0003](docs/adr/0003-mqtt-als-event-schnittstelle.md) — MQTT as the event interface to other devices
+- [ADR 0003](docs/adr/0003-mqtt-als-event-schnittstelle.md) — MQTT as the event interface to other devices (proposed)
 - [ADR 0004](docs/adr/0004-gesten-als-edge-events.md) — gesture recognition lives here and is published as an edge event (proposed)
 
 ## Roadmap
