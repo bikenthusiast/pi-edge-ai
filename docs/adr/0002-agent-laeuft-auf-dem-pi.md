@@ -1,6 +1,8 @@
 # ADR 0002 — Der Agent läuft auf dem Pi, nicht in Lambda
 
-**Status:** akzeptiert · **Datum:** 2026-08
+**Status:** vorgeschlagen · **Datum:** 2026-08
+
+**Umsetzung:** geplant, noch nicht begonnen.
 
 ## Kontext
 Der Strands-Agent des Edge Ops Copilot könnte auf dem Pi oder cloudseitig
@@ -17,9 +19,10 @@ Agent-Loop auf dem Pi; nur die Modell-Inferenz und das Retrieval gehen zu AWS.
 
 ## Konsequenzen
 - Der Pi braucht AWS-Credentials → eigener IAM-User mit minimalen Rechten,
-  Rotation dokumentiert in `infra/iam/`.
+  Rotation wird mit der Umsetzung dokumentiert.
 - Bei Netzausfall bleibt die Vision-Pipeline funktionsfähig, nur die
-  Reasoning-Ebene fällt aus. Das ist gewollt und wird getestet.
+  Reasoning-Ebene fällt aus. Das ist gewollt und soll mit der Umsetzung
+  getestet werden.
 
 ## Verworfene Alternativen
 - **Bedrock Agents Classic:** seit 30.07.2026 für Neukunden geschlossen.

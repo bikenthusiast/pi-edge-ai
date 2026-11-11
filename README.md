@@ -1,13 +1,14 @@
 # pi-edge-ai
 
 Real-time image classification on a Raspberry Pi 4, turned into a clean event
-stream that other devices and an LLM agent can consume.
+stream that other devices can consume, and that a planned LLM agent will query.
 
 The Pi runs a quantised MobileNet on a USB webcam feed, collapses thousands of
 per-frame predictions into a handful of meaningful events, stores them in
 SQLite and publishes them over MQTT. The reasoning layer — an agent that
-answers questions like *"what did the camera see this morning?"* — is being
-built on AWS Bedrock, with the agent loop staying on the device.
+answers questions like *"what did the camera see this morning?"* — is planned
+on AWS Bedrock, with the agent loop staying on the device. Work on it has not
+started yet.
 
 The project is as much about **engineering the edge/cloud boundary** as about
 the model: what runs where, what gets deployed, what keeps working when the
@@ -136,7 +137,7 @@ To check the camera on the Pi: `v4l2-ctl --list-devices` and
 src/edge/vision/    model loading, preprocessing, camera, live pipeline, benchmark
 src/edge/events/    SQLite event log, CLI report, MQTT publisher
 src/edge/gesture/   8×8 depth frames → swipe gestures (synthetic, replay, SEN0628)
-src/edge/agent/     Strands tools for the Bedrock agent (in progress)
+src/edge/agent/     placeholder for the planned Bedrock agent (empty)
 tests/              runs on the Mac; hardware-marked tests run on the Pi
 scripts/            deploy, one-time Pi bootstrap, model download
 docs/adr/           architecture decision records (German)
@@ -146,9 +147,9 @@ docs/mqtt.md        MQTT topics, payload schema, broker setup
 ## Design decisions
 
 - [ADR 0001](docs/adr/0001-litert-statt-tflite-runtime.md) — LiteRT instead of `tflite-runtime`
-- [ADR 0002](docs/adr/0002-agent-laeuft-auf-dem-pi.md) — the agent loop runs on the Pi, not in Lambda
+- [ADR 0002](docs/adr/0002-agent-laeuft-auf-dem-pi.md) — the agent loop runs on the Pi, not in Lambda (proposed)
 - [ADR 0003](docs/adr/0003-mqtt-als-event-schnittstelle.md) — MQTT as the event interface to other devices
-- [ADR 0004](docs/adr/0004-gesten-als-edge-events.md) — gesture recognition lives here and is published as an edge event
+- [ADR 0004](docs/adr/0004-gesten-als-edge-events.md) — gesture recognition lives here and is published as an edge event (proposed)
 
 ## Roadmap
 
