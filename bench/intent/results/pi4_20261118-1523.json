@@ -1,0 +1,1906 @@
+{
+  "label": "pi4",
+  "timestamp": "2026-11-18T15:23:53",
+  "meta": {
+    "hostname": "raspberrypi",
+    "model": "Raspberry Pi 4 Model B Rev 1.4",
+    "cpu_count": 4,
+    "mem_gb": 7.6,
+    "os": "Linux-6.18.39+rpt-rpi-v8-aarch64-with-glibc2.41",
+    "ollama_version": "0.40.16",
+    "throttled_at_start": "0x0",
+    "temp_at_start": 37.4
+  },
+  "config": {
+    "models": [
+      "qwen2.5:1.5b",
+      "qwen2.5:3b"
+    ],
+    "prompts": [
+      "v1",
+      "v2"
+    ],
+    "runs": 1,
+    "cases": 15,
+    "system_prompts": {
+      "v1": "Du bist der Befehlsparser des Sprachassistenten Jarvis.\nDer Eingabetext stammt aus einer Spracherkennung und kann Erkennungsfehler enthalten.\nOrdne ihn genau einer Aktion zu und antworte ausschließlich mit JSON nach dem vorgegebenen Schema.\n\nAktionen:\n- spotify_play: Musik starten oder fortsetzen; playlist nur setzen, wenn eine Playlist genannt wird\n- spotify_pause: Musik anhalten oder stoppen\n- lamp_on / lamp_off: Lampe bzw. Licht ein- oder ausschalten\n- timer_start: Timer stellen; minutes = Dauer in Minuten (Zahlwörter in Ziffern umwandeln)\n- unknown: alles andere\n",
+      "v2": "Du bist der Befehlsparser des Sprachassistenten Jarvis.\nDer Eingabetext stammt aus einer Spracherkennung und kann Erkennungsfehler enthalten.\nOrdne ihn genau einer Aktion zu und antworte ausschließlich mit JSON nach dem vorgegebenen Schema.\n\nAktionen:\n- spotify_play: Musik starten oder fortsetzen; playlist nur setzen, wenn ausdrücklich eine Playlist genannt wird\n- spotify_pause: Musik anhalten, stoppen, pausieren oder ausmachen\n- lamp_on / lamp_off: Lampe bzw. Licht ein- oder ausschalten (\"an\" = ein, \"aus\" = aus)\n- timer_start: Timer stellen; duration = die Zeitangabe wörtlich aus dem Satz, NICHT selbst umrechnen\n- unknown: alles andere, auch Lautstärke, Wetter, Wissensfragen oder Befehle ohne passende Aktion\n\nRegeln:\n- Playlist-Namen genau so übernehmen, wie sie im Satz stehen.\n- Wenn keine Aktion eindeutig passt, immer unknown. Niemals eine Playlist erfinden.\n\nBeispiele:\n\"Musik bitte\" -> {\"action\": \"spotify_play\"}\n\"Spiel die Playlist Gute Laune\" -> {\"action\": \"spotify_play\", \"playlist\": \"Gute Laune\"}\n\"Kannst du mal die Playlist Roadtrip Klassiker anmachen\" -> {\"action\": \"spotify_play\", \"playlist\": \"Roadtrip Klassiker\"}\n\"Stopp die Musik\" -> {\"action\": \"spotify_pause\"}\n\"Mach das Licht aus\" -> {\"action\": \"lamp_off\"}\n\"Schalt die Lampe ein\" -> {\"action\": \"lamp_on\"}\n\"Timer auf eine halbe Stunde\" -> {\"action\": \"timer_start\", \"duration\": \"eine halbe Stunde\"}\n\"Weck mich in dreiundvierzig Minuten\" -> {\"action\": \"timer_start\", \"duration\": \"dreiundvierzig Minuten\"}\n\"Mach die Musik leiser\" -> {\"action\": \"unknown\"}\n\"Was ist die Hauptstadt von Frankreich\" -> {\"action\": \"unknown\"}\n"
+    }
+  },
+  "summary": [
+    {
+      "model": "qwen2.5:1.5b",
+      "prompt": "v1",
+      "n": 15,
+      "accuracy": 0.867,
+      "action_accuracy": 0.933,
+      "valid_rate": 1.0,
+      "latency_median_s": 4.76,
+      "latency_p90_s": 7.91,
+      "tok_s_median": 3.5,
+      "prompt_s_median": 1.47,
+      "eval_tokens_median": 11,
+      "cold_start_s": 25.68,
+      "cold_load_s": 3.95,
+      "model_ram_gb": 1.09,
+      "temp_max": 56.0,
+      "temp_mean": 53.1,
+      "clock_min_mhz": 1800,
+      "clock_mean_mhz": 1800,
+      "throttled_now": "0x0"
+    },
+    {
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "n": 15,
+      "accuracy": 1.0,
+      "action_accuracy": 1.0,
+      "valid_rate": 1.0,
+      "latency_median_s": 3.75,
+      "latency_p90_s": 7.89,
+      "tok_s_median": 3.59,
+      "prompt_s_median": 1.5,
+      "eval_tokens_median": 8,
+      "cold_start_s": 45.0,
+      "cold_load_s": 0.0,
+      "model_ram_gb": 1.09,
+      "temp_max": 58.4,
+      "temp_mean": 56.3,
+      "clock_min_mhz": 1800,
+      "clock_mean_mhz": 1800,
+      "throttled_now": "0x0"
+    },
+    {
+      "model": "qwen2.5:3b",
+      "prompt": "v1",
+      "n": 15,
+      "accuracy": 0.867,
+      "action_accuracy": 1.0,
+      "valid_rate": 1.0,
+      "latency_median_s": 9.05,
+      "latency_p90_s": 15.35,
+      "tok_s_median": 1.79,
+      "prompt_s_median": 2.88,
+      "eval_tokens_median": 11,
+      "cold_start_s": 51.99,
+      "cold_load_s": 6.58,
+      "model_ram_gb": 2.02,
+      "temp_max": 58.9,
+      "temp_mean": 55.9,
+      "clock_min_mhz": 1800,
+      "clock_mean_mhz": 1800,
+      "throttled_now": "0x0"
+    },
+    {
+      "model": "qwen2.5:3b",
+      "prompt": "v2",
+      "n": 15,
+      "accuracy": 1.0,
+      "action_accuracy": 1.0,
+      "valid_rate": 1.0,
+      "latency_median_s": 7.48,
+      "latency_p90_s": 15.87,
+      "tok_s_median": 1.82,
+      "prompt_s_median": 3.07,
+      "eval_tokens_median": 8,
+      "cold_start_s": 91.58,
+      "cold_load_s": 0.0,
+      "model_ram_gb": 2.02,
+      "temp_max": 60.3,
+      "temp_mean": 57.5,
+      "clock_min_mhz": 1800,
+      "clock_mean_mhz": 1800,
+      "throttled_now": "0x0"
+    }
+  ],
+  "records": [
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v1",
+      "run": 1,
+      "text": "Starte Spotify",
+      "note": "",
+      "expected": {
+        "action": "spotify_play",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "spotify_play"
+      },
+      "raw": {
+        "action": "spotify_play"
+      },
+      "wall_s": 3.429,
+      "load_s": 0.005,
+      "prompt_tokens": 174,
+      "prompt_s": 0.391,
+      "eval_tokens": 11,
+      "eval_s": 3.014,
+      "tok_s": 3.65
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v1",
+      "run": 1,
+      "text": "Spiel mal die Playlist Feierabend",
+      "note": "",
+      "expected": {
+        "action": "spotify_play",
+        "playlist": "Feierabend",
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "spotify_play",
+        "playlist": "Feierabend"
+      },
+      "raw": {
+        "action": "spotify_play",
+        "playlist": "Feierabend"
+      },
+      "wall_s": 7.674,
+      "load_s": 0.002,
+      "prompt_tokens": 180,
+      "prompt_s": 1.605,
+      "eval_tokens": 21,
+      "eval_s": 6.05,
+      "tok_s": 3.47
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v1",
+      "run": 1,
+      "text": "Mach mal Musik von der Playlist Sonntagmorgen an",
+      "note": "",
+      "expected": {
+        "action": "spotify_play",
+        "playlist": "Sonntagmorgen",
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "spotify_play",
+        "playlist": "Sonntagmorgen"
+      },
+      "raw": {
+        "action": "spotify_play",
+        "playlist": "Sonntagmorgen"
+      },
+      "wall_s": 8.046,
+      "load_s": 0.004,
+      "prompt_tokens": 183,
+      "prompt_s": 1.975,
+      "eval_tokens": 21,
+      "eval_s": 6.054,
+      "tok_s": 3.47
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v1",
+      "run": 1,
+      "text": "spiel meine playlist deep focus",
+      "note": "zweiteiliger Name",
+      "expected": {
+        "action": "spotify_play",
+        "playlist": "Deep Focus",
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "spotify_play",
+        "playlist": "deep focus"
+      },
+      "raw": {
+        "action": "spotify_play",
+        "playlist": "deep focus"
+      },
+      "wall_s": 6.747,
+      "load_s": 0.002,
+      "prompt_tokens": 176,
+      "prompt_s": 1.283,
+      "eval_tokens": 19,
+      "eval_s": 5.449,
+      "tok_s": 3.49
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v1",
+      "run": 1,
+      "text": "starte spotty fei",
+      "note": "Erkennungsfehler",
+      "expected": {
+        "action": "spotify_play",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "spotify_play"
+      },
+      "raw": {
+        "action": "spotify_play"
+      },
+      "wall_s": 4.419,
+      "load_s": 0.003,
+      "prompt_tokens": 177,
+      "prompt_s": 1.375,
+      "eval_tokens": 11,
+      "eval_s": 3.023,
+      "tok_s": 3.64
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v1",
+      "run": 1,
+      "text": "Mach die Musik aus",
+      "note": "",
+      "expected": {
+        "action": "spotify_pause",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "spotify_pause"
+      },
+      "raw": {
+        "action": "spotify_pause"
+      },
+      "wall_s": 4.239,
+      "load_s": 0.002,
+      "prompt_tokens": 176,
+      "prompt_s": 1.182,
+      "eval_tokens": 11,
+      "eval_s": 3.038,
+      "tok_s": 3.62
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v1",
+      "run": 1,
+      "text": "Pausier mal kurz die Musik",
+      "note": "",
+      "expected": {
+        "action": "spotify_pause",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "spotify_pause"
+      },
+      "raw": {
+        "action": "spotify_pause"
+      },
+      "wall_s": 4.511,
+      "load_s": 0.002,
+      "prompt_tokens": 178,
+      "prompt_s": 1.472,
+      "eval_tokens": 11,
+      "eval_s": 3.021,
+      "tok_s": 3.64
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v1",
+      "run": 1,
+      "text": "Licht an",
+      "note": "sehr kurz",
+      "expected": {
+        "action": "lamp_on",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "lamp_on"
+      },
+      "raw": {
+        "action": "lamp_on"
+      },
+      "wall_s": 4.094,
+      "load_s": 0.003,
+      "prompt_tokens": 174,
+      "prompt_s": 1.049,
+      "eval_tokens": 11,
+      "eval_s": 3.025,
+      "tok_s": 3.64
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v1",
+      "run": 1,
+      "text": "Lampe aus bitte",
+      "note": "",
+      "expected": {
+        "action": "lamp_off",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "lamp_off"
+      },
+      "raw": {
+        "action": "lamp_off"
+      },
+      "wall_s": 4.135,
+      "load_s": 0.003,
+      "prompt_tokens": 176,
+      "prompt_s": 1.082,
+      "eval_tokens": 11,
+      "eval_s": 3.027,
+      "tok_s": 3.63
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v1",
+      "run": 1,
+      "text": "kannst du das licht ausmachen",
+      "note": "Frageform",
+      "expected": {
+        "action": "lamp_off",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "lamp_off"
+      },
+      "raw": {
+        "action": "lamp_off"
+      },
+      "wall_s": 4.765,
+      "load_s": 0.002,
+      "prompt_tokens": 181,
+      "prompt_s": 1.716,
+      "eval_tokens": 11,
+      "eval_s": 3.033,
+      "tok_s": 3.63
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v1",
+      "run": 1,
+      "text": "Stell einen Timer auf zehn Minuten",
+      "note": "",
+      "expected": {
+        "action": "timer_start",
+        "playlist": null,
+        "minutes": 10
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "timer_start",
+        "minutes": 10
+      },
+      "raw": {
+        "action": "timer_start",
+        "minutes": 10
+      },
+      "wall_s": 7.166,
+      "load_s": 0.004,
+      "prompt_tokens": 180,
+      "prompt_s": 1.702,
+      "eval_tokens": 19,
+      "eval_s": 5.445,
+      "tok_s": 3.49
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v1",
+      "run": 1,
+      "text": "Timer für eine Viertelstunde",
+      "note": "Umrechnung",
+      "expected": {
+        "action": "timer_start",
+        "playlist": null,
+        "minutes": 15
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "timer_start",
+        "minutes": 15
+      },
+      "raw": {
+        "action": "timer_start",
+        "minutes": 15
+      },
+      "wall_s": 6.963,
+      "load_s": 0.002,
+      "prompt_tokens": 179,
+      "prompt_s": 1.496,
+      "eval_tokens": 19,
+      "eval_s": 5.45,
+      "tok_s": 3.49
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v1",
+      "run": 1,
+      "text": "stell mir nen timer auf fünfundzwanzig minuten",
+      "note": "Zahlwort",
+      "expected": {
+        "action": "timer_start",
+        "playlist": null,
+        "minutes": 25
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": false,
+      "got": {
+        "action": "timer_start",
+        "minutes": 52
+      },
+      "raw": {
+        "action": "timer_start",
+        "minutes": 52
+      },
+      "wall_s": 7.496,
+      "load_s": 0.003,
+      "prompt_tokens": 183,
+      "prompt_s": 2.03,
+      "eval_tokens": 19,
+      "eval_s": 5.449,
+      "tok_s": 3.49
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v1",
+      "run": 1,
+      "text": "Mach die Musik lauter",
+      "note": "Falle: keine Lautstärke-Aktion",
+      "expected": {
+        "action": "unknown",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": false,
+      "full_ok": false,
+      "got": {
+        "action": "spotify_play",
+        "playlist": "Laut"
+      },
+      "raw": {
+        "action": "spotify_play",
+        "playlist": "Laut"
+      },
+      "wall_s": 7.816,
+      "load_s": 0.003,
+      "prompt_tokens": 177,
+      "prompt_s": 1.381,
+      "eval_tokens": 21,
+      "eval_s": 6.419,
+      "tok_s": 3.27
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v1",
+      "run": 1,
+      "text": "Wie wird das Wetter morgen",
+      "note": "",
+      "expected": {
+        "action": "unknown",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "unknown"
+      },
+      "raw": {
+        "action": "unknown"
+      },
+      "wall_s": 3.489,
+      "load_s": 0.003,
+      "prompt_tokens": 178,
+      "prompt_s": 1.471,
+      "eval_tokens": 7,
+      "eval_s": 2.002,
+      "tok_s": 3.5
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "run": 1,
+      "text": "Starte Spotify",
+      "note": "",
+      "expected": {
+        "action": "spotify_play",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "spotify_play"
+      },
+      "raw": {
+        "action": "spotify_play"
+      },
+      "wall_s": 2.561,
+      "load_s": 0.004,
+      "prompt_tokens": 476,
+      "prompt_s": 0.319,
+      "eval_tokens": 8,
+      "eval_s": 2.219,
+      "tok_s": 3.6
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "run": 1,
+      "text": "Spiel mal die Playlist Feierabend",
+      "note": "",
+      "expected": {
+        "action": "spotify_play",
+        "playlist": "Feierabend",
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "spotify_play",
+        "playlist": "Feierabend"
+      },
+      "raw": {
+        "action": "spotify_play",
+        "playlist": "Feierabend"
+      },
+      "wall_s": 6.861,
+      "load_s": 0.005,
+      "prompt_tokens": 482,
+      "prompt_s": 1.748,
+      "eval_tokens": 17,
+      "eval_s": 5.083,
+      "tok_s": 3.34
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "run": 1,
+      "text": "Mach mal Musik von der Playlist Sonntagmorgen an",
+      "note": "",
+      "expected": {
+        "action": "spotify_play",
+        "playlist": "Sonntagmorgen",
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "spotify_play",
+        "playlist": "Sonntagmorgen"
+      },
+      "raw": {
+        "action": "spotify_play",
+        "playlist": "Sonntagmorgen"
+      },
+      "wall_s": 7.213,
+      "load_s": 0.002,
+      "prompt_tokens": 485,
+      "prompt_s": 2.113,
+      "eval_tokens": 17,
+      "eval_s": 5.078,
+      "tok_s": 3.35
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "run": 1,
+      "text": "spiel meine playlist deep focus",
+      "note": "zweiteiliger Name",
+      "expected": {
+        "action": "spotify_play",
+        "playlist": "Deep Focus",
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "spotify_play",
+        "playlist": "Deep Focus"
+      },
+      "raw": {
+        "action": "spotify_play",
+        "playlist": "Deep Focus"
+      },
+      "wall_s": 5.771,
+      "load_s": 0.002,
+      "prompt_tokens": 478,
+      "prompt_s": 1.304,
+      "eval_tokens": 15,
+      "eval_s": 4.448,
+      "tok_s": 3.37
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "run": 1,
+      "text": "starte spotty fei",
+      "note": "Erkennungsfehler",
+      "expected": {
+        "action": "spotify_play",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "spotify_play"
+      },
+      "raw": {
+        "action": "spotify_play"
+      },
+      "wall_s": 3.643,
+      "load_s": 0.002,
+      "prompt_tokens": 479,
+      "prompt_s": 1.403,
+      "eval_tokens": 8,
+      "eval_s": 2.221,
+      "tok_s": 3.6
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "run": 1,
+      "text": "Mach die Musik aus",
+      "note": "",
+      "expected": {
+        "action": "spotify_pause",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "spotify_pause"
+      },
+      "raw": {
+        "action": "spotify_pause"
+      },
+      "wall_s": 3.537,
+      "load_s": 0.002,
+      "prompt_tokens": 478,
+      "prompt_s": 1.289,
+      "eval_tokens": 8,
+      "eval_s": 2.228,
+      "tok_s": 3.59
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "run": 1,
+      "text": "Pausier mal kurz die Musik",
+      "note": "",
+      "expected": {
+        "action": "spotify_pause",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "spotify_pause"
+      },
+      "raw": {
+        "action": "spotify_pause"
+      },
+      "wall_s": 3.754,
+      "load_s": 0.004,
+      "prompt_tokens": 480,
+      "prompt_s": 1.5,
+      "eval_tokens": 8,
+      "eval_s": 2.227,
+      "tok_s": 3.59
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "run": 1,
+      "text": "Licht an",
+      "note": "sehr kurz",
+      "expected": {
+        "action": "lamp_on",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "lamp_on"
+      },
+      "raw": {
+        "action": "lamp_on"
+      },
+      "wall_s": 3.286,
+      "load_s": 0.004,
+      "prompt_tokens": 476,
+      "prompt_s": 1.045,
+      "eval_tokens": 8,
+      "eval_s": 2.22,
+      "tok_s": 3.6
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "run": 1,
+      "text": "Lampe aus bitte",
+      "note": "",
+      "expected": {
+        "action": "lamp_off",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "lamp_off"
+      },
+      "raw": {
+        "action": "lamp_off"
+      },
+      "wall_s": 3.413,
+      "load_s": 0.004,
+      "prompt_tokens": 478,
+      "prompt_s": 1.174,
+      "eval_tokens": 8,
+      "eval_s": 2.215,
+      "tok_s": 3.61
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "run": 1,
+      "text": "kannst du das licht ausmachen",
+      "note": "Frageform",
+      "expected": {
+        "action": "lamp_off",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "lamp_off"
+      },
+      "raw": {
+        "action": "lamp_off"
+      },
+      "wall_s": 4.102,
+      "load_s": 0.003,
+      "prompt_tokens": 483,
+      "prompt_s": 1.865,
+      "eval_tokens": 8,
+      "eval_s": 2.215,
+      "tok_s": 3.61
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "run": 1,
+      "text": "Stell einen Timer auf zehn Minuten",
+      "note": "",
+      "expected": {
+        "action": "timer_start",
+        "playlist": null,
+        "minutes": 10
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "timer_start",
+        "minutes": 10
+      },
+      "raw": {
+        "action": "timer_start",
+        "duration": "zehn Minuten"
+      },
+      "wall_s": 6.829,
+      "load_s": 0.003,
+      "prompt_tokens": 482,
+      "prompt_s": 1.745,
+      "eval_tokens": 17,
+      "eval_s": 5.064,
+      "tok_s": 3.36
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "run": 1,
+      "text": "Timer für eine Viertelstunde",
+      "note": "Umrechnung",
+      "expected": {
+        "action": "timer_start",
+        "playlist": null,
+        "minutes": 15
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "timer_start",
+        "minutes": 15
+      },
+      "raw": {
+        "action": "timer_start",
+        "duration": "eine Viertelstunde"
+      },
+      "wall_s": 7.675,
+      "load_s": 0.002,
+      "prompt_tokens": 481,
+      "prompt_s": 1.627,
+      "eval_tokens": 20,
+      "eval_s": 6.03,
+      "tok_s": 3.32
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "run": 1,
+      "text": "stell mir nen timer auf fünfundzwanzig minuten",
+      "note": "Zahlwort",
+      "expected": {
+        "action": "timer_start",
+        "playlist": null,
+        "minutes": 25
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "timer_start",
+        "minutes": 25
+      },
+      "raw": {
+        "action": "timer_start",
+        "duration": "fünfundzwanzig Minuten"
+      },
+      "wall_s": 8.22,
+      "load_s": 0.002,
+      "prompt_tokens": 485,
+      "prompt_s": 2.117,
+      "eval_tokens": 20,
+      "eval_s": 6.083,
+      "tok_s": 3.29
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "run": 1,
+      "text": "Mach die Musik lauter",
+      "note": "Falle: keine Lautstärke-Aktion",
+      "expected": {
+        "action": "unknown",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "unknown"
+      },
+      "raw": {
+        "action": "unknown"
+      },
+      "wall_s": 3.33,
+      "load_s": 0.002,
+      "prompt_tokens": 479,
+      "prompt_s": 1.401,
+      "eval_tokens": 7,
+      "eval_s": 1.909,
+      "tok_s": 3.67
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "run": 1,
+      "text": "Wie wird das Wetter morgen",
+      "note": "",
+      "expected": {
+        "action": "unknown",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "unknown"
+      },
+      "raw": {
+        "action": "unknown"
+      },
+      "wall_s": 3.435,
+      "load_s": 0.002,
+      "prompt_tokens": 480,
+      "prompt_s": 1.508,
+      "eval_tokens": 7,
+      "eval_s": 1.899,
+      "tok_s": 3.69
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:3b",
+      "prompt": "v1",
+      "run": 1,
+      "text": "Starte Spotify",
+      "note": "",
+      "expected": {
+        "action": "spotify_play",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "spotify_play"
+      },
+      "raw": {
+        "action": "spotify_play"
+      },
+      "wall_s": 6.777,
+      "load_s": 0.006,
+      "prompt_tokens": 174,
+      "prompt_s": 0.613,
+      "eval_tokens": 11,
+      "eval_s": 6.142,
+      "tok_s": 1.79
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:3b",
+      "prompt": "v1",
+      "run": 1,
+      "text": "Spiel mal die Playlist Feierabend",
+      "note": "",
+      "expected": {
+        "action": "spotify_play",
+        "playlist": "Feierabend",
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "spotify_play",
+        "playlist": "Feierabend"
+      },
+      "raw": {
+        "action": "spotify_play",
+        "playlist": "Feierabend"
+      },
+      "wall_s": 15.639,
+      "load_s": 0.002,
+      "prompt_tokens": 180,
+      "prompt_s": 3.353,
+      "eval_tokens": 21,
+      "eval_s": 12.268,
+      "tok_s": 1.71
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:3b",
+      "prompt": "v1",
+      "run": 1,
+      "text": "Mach mal Musik von der Playlist Sonntagmorgen an",
+      "note": "",
+      "expected": {
+        "action": "spotify_play",
+        "playlist": "Sonntagmorgen",
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": false,
+      "got": {
+        "action": "spotify_play"
+      },
+      "raw": {
+        "action": "spotify_play"
+      },
+      "wall_s": 10.27,
+      "load_s": 0.004,
+      "prompt_tokens": 183,
+      "prompt_s": 4.077,
+      "eval_tokens": 11,
+      "eval_s": 6.175,
+      "tok_s": 1.78
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:3b",
+      "prompt": "v1",
+      "run": 1,
+      "text": "spiel meine playlist deep focus",
+      "note": "zweiteiliger Name",
+      "expected": {
+        "action": "spotify_play",
+        "playlist": "Deep Focus",
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "spotify_play",
+        "playlist": "deep focus"
+      },
+      "raw": {
+        "action": "spotify_play",
+        "playlist": "deep focus"
+      },
+      "wall_s": 13.47,
+      "load_s": 0.003,
+      "prompt_tokens": 176,
+      "prompt_s": 2.428,
+      "eval_tokens": 19,
+      "eval_s": 11.024,
+      "tok_s": 1.72
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:3b",
+      "prompt": "v1",
+      "run": 1,
+      "text": "starte spotty fei",
+      "note": "Erkennungsfehler",
+      "expected": {
+        "action": "spotify_play",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "spotify_play"
+      },
+      "raw": {
+        "action": "spotify_play"
+      },
+      "wall_s": 8.736,
+      "load_s": 0.003,
+      "prompt_tokens": 177,
+      "prompt_s": 2.651,
+      "eval_tokens": 11,
+      "eval_s": 6.067,
+      "tok_s": 1.81
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:3b",
+      "prompt": "v1",
+      "run": 1,
+      "text": "Mach die Musik aus",
+      "note": "",
+      "expected": {
+        "action": "spotify_pause",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "spotify_pause"
+      },
+      "raw": {
+        "action": "spotify_pause"
+      },
+      "wall_s": 8.619,
+      "load_s": 0.003,
+      "prompt_tokens": 176,
+      "prompt_s": 2.443,
+      "eval_tokens": 11,
+      "eval_s": 6.159,
+      "tok_s": 1.79
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:3b",
+      "prompt": "v1",
+      "run": 1,
+      "text": "Pausier mal kurz die Musik",
+      "note": "",
+      "expected": {
+        "action": "spotify_pause",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "spotify_pause"
+      },
+      "raw": {
+        "action": "spotify_pause"
+      },
+      "wall_s": 9.05,
+      "load_s": 0.002,
+      "prompt_tokens": 178,
+      "prompt_s": 2.882,
+      "eval_tokens": 11,
+      "eval_s": 6.151,
+      "tok_s": 1.79
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:3b",
+      "prompt": "v1",
+      "run": 1,
+      "text": "Licht an",
+      "note": "sehr kurz",
+      "expected": {
+        "action": "lamp_on",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "lamp_on"
+      },
+      "raw": {
+        "action": "lamp_on"
+      },
+      "wall_s": 8.066,
+      "load_s": 0.009,
+      "prompt_tokens": 174,
+      "prompt_s": 1.969,
+      "eval_tokens": 11,
+      "eval_s": 6.071,
+      "tok_s": 1.81
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:3b",
+      "prompt": "v1",
+      "run": 1,
+      "text": "Lampe aus bitte",
+      "note": "",
+      "expected": {
+        "action": "lamp_off",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "lamp_off"
+      },
+      "raw": {
+        "action": "lamp_off"
+      },
+      "wall_s": 8.374,
+      "load_s": 0.003,
+      "prompt_tokens": 176,
+      "prompt_s": 2.213,
+      "eval_tokens": 11,
+      "eval_s": 6.138,
+      "tok_s": 1.79
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:3b",
+      "prompt": "v1",
+      "run": 1,
+      "text": "kannst du das licht ausmachen",
+      "note": "Frageform",
+      "expected": {
+        "action": "lamp_off",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "lamp_off"
+      },
+      "raw": {
+        "action": "lamp_off"
+      },
+      "wall_s": 9.691,
+      "load_s": 0.002,
+      "prompt_tokens": 181,
+      "prompt_s": 3.554,
+      "eval_tokens": 11,
+      "eval_s": 6.12,
+      "tok_s": 1.8
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:3b",
+      "prompt": "v1",
+      "run": 1,
+      "text": "Stell einen Timer auf zehn Minuten",
+      "note": "",
+      "expected": {
+        "action": "timer_start",
+        "playlist": null,
+        "minutes": 10
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "timer_start",
+        "minutes": 10
+      },
+      "raw": {
+        "action": "timer_start",
+        "minutes": 10
+      },
+      "wall_s": 14.286,
+      "load_s": 0.003,
+      "prompt_tokens": 180,
+      "prompt_s": 3.328,
+      "eval_tokens": 19,
+      "eval_s": 10.942,
+      "tok_s": 1.74
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:3b",
+      "prompt": "v1",
+      "run": 1,
+      "text": "Timer für eine Viertelstunde",
+      "note": "Umrechnung",
+      "expected": {
+        "action": "timer_start",
+        "playlist": null,
+        "minutes": 15
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": false,
+      "got": {
+        "action": "timer_start",
+        "minutes": 20
+      },
+      "raw": {
+        "action": "timer_start",
+        "minutes": 20
+      },
+      "wall_s": 14.128,
+      "load_s": 0.003,
+      "prompt_tokens": 179,
+      "prompt_s": 3.101,
+      "eval_tokens": 19,
+      "eval_s": 11.01,
+      "tok_s": 1.73
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:3b",
+      "prompt": "v1",
+      "run": 1,
+      "text": "stell mir nen timer auf fünfundzwanzig minuten",
+      "note": "Zahlwort",
+      "expected": {
+        "action": "timer_start",
+        "playlist": null,
+        "minutes": 25
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "timer_start",
+        "minutes": 25
+      },
+      "raw": {
+        "action": "timer_start",
+        "minutes": 25
+      },
+      "wall_s": 15.164,
+      "load_s": 0.003,
+      "prompt_tokens": 183,
+      "prompt_s": 4.065,
+      "eval_tokens": 19,
+      "eval_s": 11.081,
+      "tok_s": 1.71
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:3b",
+      "prompt": "v1",
+      "run": 1,
+      "text": "Mach die Musik lauter",
+      "note": "Falle: keine Lautstärke-Aktion",
+      "expected": {
+        "action": "unknown",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "unknown"
+      },
+      "raw": {
+        "action": "unknown"
+      },
+      "wall_s": 8.205,
+      "load_s": 0.002,
+      "prompt_tokens": 177,
+      "prompt_s": 2.651,
+      "eval_tokens": 10,
+      "eval_s": 5.539,
+      "tok_s": 1.81
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:3b",
+      "prompt": "v1",
+      "run": 1,
+      "text": "Wie wird das Wetter morgen",
+      "note": "",
+      "expected": {
+        "action": "unknown",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "unknown"
+      },
+      "raw": {
+        "action": "unknown"
+      },
+      "wall_s": 8.356,
+      "load_s": 0.005,
+      "prompt_tokens": 178,
+      "prompt_s": 2.879,
+      "eval_tokens": 10,
+      "eval_s": 5.456,
+      "tok_s": 1.83
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:3b",
+      "prompt": "v2",
+      "run": 1,
+      "text": "Starte Spotify",
+      "note": "",
+      "expected": {
+        "action": "spotify_play",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "spotify_play"
+      },
+      "raw": {
+        "action": "spotify_play"
+      },
+      "wall_s": 5.029,
+      "load_s": 0.003,
+      "prompt_tokens": 476,
+      "prompt_s": 0.621,
+      "eval_tokens": 8,
+      "eval_s": 4.387,
+      "tok_s": 1.82
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:3b",
+      "prompt": "v2",
+      "run": 1,
+      "text": "Spiel mal die Playlist Feierabend",
+      "note": "",
+      "expected": {
+        "action": "spotify_play",
+        "playlist": "Feierabend",
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "spotify_play",
+        "playlist": "Feierabend"
+      },
+      "raw": {
+        "action": "spotify_play",
+        "playlist": "Feierabend"
+      },
+      "wall_s": 13.576,
+      "load_s": 0.003,
+      "prompt_tokens": 482,
+      "prompt_s": 3.532,
+      "eval_tokens": 17,
+      "eval_s": 10.024,
+      "tok_s": 1.7
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:3b",
+      "prompt": "v2",
+      "run": 1,
+      "text": "Mach mal Musik von der Playlist Sonntagmorgen an",
+      "note": "",
+      "expected": {
+        "action": "spotify_play",
+        "playlist": "Sonntagmorgen",
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "spotify_play",
+        "playlist": "Sonntagmorgen"
+      },
+      "raw": {
+        "action": "spotify_play",
+        "playlist": "Sonntagmorgen"
+      },
+      "wall_s": 14.38,
+      "load_s": 0.003,
+      "prompt_tokens": 485,
+      "prompt_s": 4.321,
+      "eval_tokens": 17,
+      "eval_s": 10.034,
+      "tok_s": 1.69
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:3b",
+      "prompt": "v2",
+      "run": 1,
+      "text": "spiel meine playlist deep focus",
+      "note": "zweiteiliger Name",
+      "expected": {
+        "action": "spotify_play",
+        "playlist": "Deep Focus",
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "spotify_play",
+        "playlist": "deep focus"
+      },
+      "raw": {
+        "action": "spotify_play",
+        "playlist": "deep focus"
+      },
+      "wall_s": 11.369,
+      "load_s": 0.003,
+      "prompt_tokens": 478,
+      "prompt_s": 2.571,
+      "eval_tokens": 15,
+      "eval_s": 8.778,
+      "tok_s": 1.71
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:3b",
+      "prompt": "v2",
+      "run": 1,
+      "text": "starte spotty fei",
+      "note": "Erkennungsfehler",
+      "expected": {
+        "action": "spotify_play",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "spotify_play"
+      },
+      "raw": {
+        "action": "spotify_play"
+      },
+      "wall_s": 7.223,
+      "load_s": 0.002,
+      "prompt_tokens": 479,
+      "prompt_s": 2.811,
+      "eval_tokens": 8,
+      "eval_s": 4.387,
+      "tok_s": 1.82
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:3b",
+      "prompt": "v2",
+      "run": 1,
+      "text": "Mach die Musik aus",
+      "note": "",
+      "expected": {
+        "action": "spotify_pause",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "spotify_pause"
+      },
+      "raw": {
+        "action": "spotify_pause"
+      },
+      "wall_s": 6.987,
+      "load_s": 0.002,
+      "prompt_tokens": 478,
+      "prompt_s": 2.584,
+      "eval_tokens": 8,
+      "eval_s": 4.383,
+      "tok_s": 1.83
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:3b",
+      "prompt": "v2",
+      "run": 1,
+      "text": "Pausier mal kurz die Musik",
+      "note": "",
+      "expected": {
+        "action": "spotify_pause",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "spotify_pause"
+      },
+      "raw": {
+        "action": "spotify_pause"
+      },
+      "wall_s": 7.478,
+      "load_s": 0.002,
+      "prompt_tokens": 480,
+      "prompt_s": 3.067,
+      "eval_tokens": 8,
+      "eval_s": 4.392,
+      "tok_s": 1.82
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:3b",
+      "prompt": "v2",
+      "run": 1,
+      "text": "Licht an",
+      "note": "sehr kurz",
+      "expected": {
+        "action": "lamp_on",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "lamp_on"
+      },
+      "raw": {
+        "action": "lamp_on"
+      },
+      "wall_s": 6.509,
+      "load_s": 0.002,
+      "prompt_tokens": 476,
+      "prompt_s": 2.103,
+      "eval_tokens": 8,
+      "eval_s": 4.387,
+      "tok_s": 1.82
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:3b",
+      "prompt": "v2",
+      "run": 1,
+      "text": "Lampe aus bitte",
+      "note": "",
+      "expected": {
+        "action": "lamp_off",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "lamp_off"
+      },
+      "raw": {
+        "action": "lamp_off"
+      },
+      "wall_s": 6.756,
+      "load_s": 0.003,
+      "prompt_tokens": 478,
+      "prompt_s": 2.351,
+      "eval_tokens": 8,
+      "eval_s": 4.383,
+      "tok_s": 1.83
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:3b",
+      "prompt": "v2",
+      "run": 1,
+      "text": "kannst du das licht ausmachen",
+      "note": "Frageform",
+      "expected": {
+        "action": "lamp_off",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "lamp_off"
+      },
+      "raw": {
+        "action": "lamp_off"
+      },
+      "wall_s": 8.188,
+      "load_s": 0.003,
+      "prompt_tokens": 483,
+      "prompt_s": 3.774,
+      "eval_tokens": 8,
+      "eval_s": 4.381,
+      "tok_s": 1.83
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:3b",
+      "prompt": "v2",
+      "run": 1,
+      "text": "Stell einen Timer auf zehn Minuten",
+      "note": "",
+      "expected": {
+        "action": "timer_start",
+        "playlist": null,
+        "minutes": 10
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "timer_start",
+        "minutes": 10
+      },
+      "raw": {
+        "action": "timer_start",
+        "duration": "zehn Minuten"
+      },
+      "wall_s": 13.58,
+      "load_s": 0.003,
+      "prompt_tokens": 482,
+      "prompt_s": 3.548,
+      "eval_tokens": 17,
+      "eval_s": 10.011,
+      "tok_s": 1.7
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:3b",
+      "prompt": "v2",
+      "run": 1,
+      "text": "Timer für eine Viertelstunde",
+      "note": "Umrechnung",
+      "expected": {
+        "action": "timer_start",
+        "playlist": null,
+        "minutes": 15
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "timer_start",
+        "minutes": 15
+      },
+      "raw": {
+        "action": "timer_start",
+        "duration": "eine Viertelstunde"
+      },
+      "wall_s": 15.204,
+      "load_s": 0.003,
+      "prompt_tokens": 481,
+      "prompt_s": 3.303,
+      "eval_tokens": 20,
+      "eval_s": 11.88,
+      "tok_s": 1.68
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:3b",
+      "prompt": "v2",
+      "run": 1,
+      "text": "stell mir nen timer auf fünfundzwanzig minuten",
+      "note": "Zahlwort",
+      "expected": {
+        "action": "timer_start",
+        "playlist": null,
+        "minutes": 25
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "timer_start",
+        "minutes": 25
+      },
+      "raw": {
+        "action": "timer_start",
+        "duration": "fünfundzwanzig minuten"
+      },
+      "wall_s": 16.864,
+      "load_s": 0.003,
+      "prompt_tokens": 485,
+      "prompt_s": 4.324,
+      "eval_tokens": 21,
+      "eval_s": 12.519,
+      "tok_s": 1.68
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:3b",
+      "prompt": "v2",
+      "run": 1,
+      "text": "Mach die Musik lauter",
+      "note": "Falle: keine Lautstärke-Aktion",
+      "expected": {
+        "action": "unknown",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "unknown"
+      },
+      "raw": {
+        "action": "unknown"
+      },
+      "wall_s": 6.595,
+      "load_s": 0.002,
+      "prompt_tokens": 479,
+      "prompt_s": 2.821,
+      "eval_tokens": 7,
+      "eval_s": 3.753,
+      "tok_s": 1.87
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:3b",
+      "prompt": "v2",
+      "run": 1,
+      "text": "Wie wird das Wetter morgen",
+      "note": "",
+      "expected": {
+        "action": "unknown",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "unknown"
+      },
+      "raw": {
+        "action": "unknown"
+      },
+      "wall_s": 6.855,
+      "load_s": 0.002,
+      "prompt_tokens": 480,
+      "prompt_s": 3.077,
+      "eval_tokens": 7,
+      "eval_s": 3.759,
+      "tok_s": 1.86
+    }
+  ]
+}

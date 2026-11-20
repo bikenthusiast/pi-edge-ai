@@ -1,0 +1,934 @@
+{
+  "label": "pi4",
+  "timestamp": "2026-11-18T16:12:24",
+  "meta": {
+    "hostname": "raspberrypi",
+    "model": "Raspberry Pi 4 Model B Rev 1.4",
+    "cpu_count": 4,
+    "mem_gb": 7.6,
+    "os": "Linux-6.18.39+rpt-rpi-v8-aarch64-with-glibc2.41",
+    "ollama_version": "0.40.16",
+    "throttled_at_start": "0x0",
+    "temp_at_start": 36.5
+  },
+  "config": {
+    "models": [
+      "qwen2.5:1.5b"
+    ],
+    "prompts": [
+      "v2"
+    ],
+    "fastpath": true,
+    "known_playlists": [
+      "Feierabend"
+    ],
+    "runs": 1,
+    "cases": "holdout",
+    "n_cases": 26,
+    "system_prompts": {
+      "v2": "Du bist der Befehlsparser des Sprachassistenten Jarvis.\nDer Eingabetext stammt aus einer Spracherkennung und kann Erkennungsfehler enthalten.\nOrdne ihn genau einer Aktion zu und antworte ausschließlich mit JSON nach dem vorgegebenen Schema.\n\nAktionen:\n- spotify_play: Musik starten oder fortsetzen; playlist nur setzen, wenn ausdrücklich eine Playlist genannt wird\n- spotify_pause: Musik anhalten, stoppen, pausieren oder ausmachen\n- lamp_on / lamp_off: Lampe bzw. Licht ein- oder ausschalten (\"an\" = ein, \"aus\" = aus)\n- timer_start: Timer stellen; duration = die Zeitangabe wörtlich aus dem Satz, NICHT selbst umrechnen\n- unknown: alles andere, auch Lautstärke, Wetter, Wissensfragen oder Befehle ohne passende Aktion\n\nRegeln:\n- Playlist-Namen genau so übernehmen, wie sie im Satz stehen.\n- Wenn keine Aktion eindeutig passt, immer unknown. Niemals eine Playlist erfinden.\n\nBeispiele:\n\"Musik bitte\" -> {\"action\": \"spotify_play\"}\n\"Spiel die Playlist Gute Laune\" -> {\"action\": \"spotify_play\", \"playlist\": \"Gute Laune\"}\n\"Kannst du mal die Playlist Roadtrip Klassiker anmachen\" -> {\"action\": \"spotify_play\", \"playlist\": \"Roadtrip Klassiker\"}\n\"Stopp die Musik\" -> {\"action\": \"spotify_pause\"}\n\"Mach das Licht aus\" -> {\"action\": \"lamp_off\"}\n\"Schalt die Lampe ein\" -> {\"action\": \"lamp_on\"}\n\"Timer auf eine halbe Stunde\" -> {\"action\": \"timer_start\", \"duration\": \"eine halbe Stunde\"}\n\"Weck mich in dreiundvierzig Minuten\" -> {\"action\": \"timer_start\", \"duration\": \"dreiundvierzig Minuten\"}\n\"Mach die Musik leiser\" -> {\"action\": \"unknown\"}\n\"Was ist die Hauptstadt von Frankreich\" -> {\"action\": \"unknown\"}\n"
+    }
+  },
+  "summary": [
+    {
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "fastpath": true,
+      "cases": "holdout",
+      "fastpath_rate": 0.423,
+      "n": 26,
+      "accuracy": 0.846,
+      "action_accuracy": 0.923,
+      "valid_rate": 1.0,
+      "latency_median_s": 3.28,
+      "latency_p90_s": 6.85,
+      "tok_s_median": 3.59,
+      "latency_llm_median_s": 3.63,
+      "prompt_s_median": 1.4,
+      "eval_tokens_median": 8,
+      "cold_start_s": 57.92,
+      "cold_load_s": 3.97,
+      "model_ram_gb": 1.09,
+      "temp_max": 56.0,
+      "temp_mean": 54.2,
+      "clock_min_mhz": 1800,
+      "clock_mean_mhz": 1800,
+      "throttled_now": "0x0"
+    }
+  ],
+  "records": [
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "fastpath": true,
+      "cases": "holdout",
+      "path": "rules",
+      "run": 1,
+      "text": "Jarvis mach mal das Licht an",
+      "note": "claude Anrede",
+      "expected": {
+        "action": "lamp_on",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "lamp_on"
+      },
+      "raw": {
+        "action": "lamp_on",
+        "playlist": null,
+        "minutes": null
+      },
+      "wall_s": 0.0004,
+      "load_s": 0.0,
+      "prompt_tokens": 0,
+      "prompt_s": 0.0,
+      "eval_tokens": 0,
+      "eval_s": 0.0,
+      "tok_s": null
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "fastpath": true,
+      "cases": "holdout",
+      "path": "rules",
+      "run": 1,
+      "text": "Licht ausschalten",
+      "note": "claude",
+      "expected": {
+        "action": "lamp_off",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "lamp_off"
+      },
+      "raw": {
+        "action": "lamp_off",
+        "playlist": null,
+        "minutes": null
+      },
+      "wall_s": 0.0001,
+      "load_s": 0.0,
+      "prompt_tokens": 0,
+      "prompt_s": 0.0,
+      "eval_tokens": 0,
+      "eval_s": 0.0,
+      "tok_s": null
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "fastpath": true,
+      "cases": "holdout",
+      "path": "rules",
+      "run": 1,
+      "text": "Kannst du die Lampe bitte einschalten",
+      "note": "claude Frageform",
+      "expected": {
+        "action": "lamp_on",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "lamp_on"
+      },
+      "raw": {
+        "action": "lamp_on",
+        "playlist": null,
+        "minutes": null
+      },
+      "wall_s": 0.0001,
+      "load_s": 0.0,
+      "prompt_tokens": 0,
+      "prompt_s": 0.0,
+      "eval_tokens": 0,
+      "eval_s": 0.0,
+      "tok_s": null
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "fastpath": true,
+      "cases": "holdout",
+      "path": "rules",
+      "run": 1,
+      "text": "Mach das Licht wieder aus",
+      "note": "claude",
+      "expected": {
+        "action": "lamp_off",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "lamp_off"
+      },
+      "raw": {
+        "action": "lamp_off",
+        "playlist": null,
+        "minutes": null
+      },
+      "wall_s": 0.0,
+      "load_s": 0.0,
+      "prompt_tokens": 0,
+      "prompt_s": 0.0,
+      "eval_tokens": 0,
+      "eval_s": 0.0,
+      "tok_s": null
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "fastpath": true,
+      "cases": "holdout",
+      "path": "llm",
+      "run": 1,
+      "text": "Mach es hell",
+      "note": "claude ohne Objekt",
+      "expected": {
+        "action": "lamp_on",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "lamp_on"
+      },
+      "raw": {
+        "action": "lamp_on"
+      },
+      "wall_s": 3.47,
+      "load_s": 0.006,
+      "prompt_tokens": 477,
+      "prompt_s": 1.212,
+      "eval_tokens": 8,
+      "eval_s": 2.229,
+      "tok_s": 3.59
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "fastpath": true,
+      "cases": "holdout",
+      "path": "llm",
+      "run": 1,
+      "text": "licht and",
+      "note": "claude Erkennungsfehler an->and",
+      "expected": {
+        "action": "lamp_on",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "lamp_on"
+      },
+      "raw": {
+        "action": "lamp_on"
+      },
+      "wall_s": 3.186,
+      "load_s": 0.002,
+      "prompt_tokens": 475,
+      "prompt_s": 0.94,
+      "eval_tokens": 8,
+      "eval_s": 2.227,
+      "tok_s": 3.59
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "fastpath": true,
+      "cases": "holdout",
+      "path": "rules",
+      "run": 1,
+      "text": "Musik weiter",
+      "note": "claude",
+      "expected": {
+        "action": "spotify_play",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "spotify_play"
+      },
+      "raw": {
+        "action": "spotify_play",
+        "playlist": null,
+        "minutes": null
+      },
+      "wall_s": 0.0001,
+      "load_s": 0.0,
+      "prompt_tokens": 0,
+      "prompt_s": 0.0,
+      "eval_tokens": 0,
+      "eval_s": 0.0,
+      "tok_s": null
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "fastpath": true,
+      "cases": "holdout",
+      "path": "llm",
+      "run": 1,
+      "text": "Spiel was auf Spotify",
+      "note": "claude",
+      "expected": {
+        "action": "spotify_play",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "spotify_play"
+      },
+      "raw": {
+        "action": "spotify_play"
+      },
+      "wall_s": 3.51,
+      "load_s": 0.002,
+      "prompt_tokens": 478,
+      "prompt_s": 1.28,
+      "eval_tokens": 8,
+      "eval_s": 2.212,
+      "tok_s": 3.62
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "fastpath": true,
+      "cases": "holdout",
+      "path": "llm",
+      "run": 1,
+      "text": "Halt die Musik an",
+      "note": "claude getrenntes Verb anhalten",
+      "expected": {
+        "action": "spotify_pause",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "spotify_pause"
+      },
+      "raw": {
+        "action": "spotify_pause"
+      },
+      "wall_s": 3.533,
+      "load_s": 0.002,
+      "prompt_tokens": 478,
+      "prompt_s": 1.278,
+      "eval_tokens": 8,
+      "eval_s": 2.231,
+      "tok_s": 3.59
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "fastpath": true,
+      "cases": "holdout",
+      "path": "rules",
+      "run": 1,
+      "text": "Spotify aus",
+      "note": "claude",
+      "expected": {
+        "action": "spotify_pause",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "spotify_pause"
+      },
+      "raw": {
+        "action": "spotify_pause",
+        "playlist": null,
+        "minutes": null
+      },
+      "wall_s": 0.0001,
+      "load_s": 0.0,
+      "prompt_tokens": 0,
+      "prompt_s": 0.0,
+      "eval_tokens": 0,
+      "eval_s": 0.0,
+      "tok_s": null
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "fastpath": true,
+      "cases": "holdout",
+      "path": "llm",
+      "run": 1,
+      "text": "Lass die Musik laufen",
+      "note": "claude",
+      "expected": {
+        "action": "spotify_play",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "spotify_play"
+      },
+      "raw": {
+        "action": "spotify_play"
+      },
+      "wall_s": 3.629,
+      "load_s": 0.002,
+      "prompt_tokens": 479,
+      "prompt_s": 1.393,
+      "eval_tokens": 8,
+      "eval_s": 2.216,
+      "tok_s": 3.61
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "fastpath": true,
+      "cases": "holdout",
+      "path": "llm",
+      "run": 1,
+      "text": "Spiel die Playlist Feierabend ab",
+      "note": "claude",
+      "expected": {
+        "action": "spotify_play",
+        "playlist": "Feierabend",
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "spotify_play",
+        "playlist": "Feierabend"
+      },
+      "raw": {
+        "action": "spotify_play",
+        "playlist": "Feierabend"
+      },
+      "wall_s": 6.849,
+      "load_s": 0.002,
+      "prompt_tokens": 482,
+      "prompt_s": 1.748,
+      "eval_tokens": 17,
+      "eval_s": 5.078,
+      "tok_s": 3.35
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "fastpath": true,
+      "cases": "holdout",
+      "path": "rules",
+      "run": 1,
+      "text": "Feierabend Musik bitte",
+      "note": "claude ohne Playlist-Wort",
+      "expected": {
+        "action": "spotify_play",
+        "playlist": "Feierabend",
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "spotify_play",
+        "playlist": "Feierabend"
+      },
+      "raw": {
+        "action": "spotify_play",
+        "playlist": "Feierabend",
+        "minutes": null
+      },
+      "wall_s": 0.0001,
+      "load_s": 0.0,
+      "prompt_tokens": 0,
+      "prompt_s": 0.0,
+      "eval_tokens": 0,
+      "eval_s": 0.0,
+      "tok_s": null
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "fastpath": true,
+      "cases": "holdout",
+      "path": "llm",
+      "run": 1,
+      "text": "spiel die play liste feier abend",
+      "note": "claude Erkennungsfehler getrennte Wörter",
+      "expected": {
+        "action": "spotify_play",
+        "playlist": "Feierabend",
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": false,
+      "got": {
+        "action": "spotify_play",
+        "playlist": "Play Liste Feier Abend"
+      },
+      "raw": {
+        "action": "spotify_play",
+        "playlist": "Play Liste Feier Abend"
+      },
+      "wall_s": 7.362,
+      "load_s": 0.003,
+      "prompt_tokens": 481,
+      "prompt_s": 1.622,
+      "eval_tokens": 19,
+      "eval_s": 5.719,
+      "tok_s": 3.32
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "fastpath": true,
+      "cases": "holdout",
+      "path": "llm",
+      "run": 1,
+      "text": "Spiel meine Playlist Chill am Abend",
+      "note": "claude unbekannte dreiteilige Playlist",
+      "expected": {
+        "action": "spotify_play",
+        "playlist": "Chill am Abend",
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": false,
+      "got": {
+        "action": "spotify_play",
+        "playlist": "Chill"
+      },
+      "raw": {
+        "action": "spotify_play",
+        "playlist": "Chill"
+      },
+      "wall_s": 6.085,
+      "load_s": 0.003,
+      "prompt_tokens": 481,
+      "prompt_s": 1.621,
+      "eval_tokens": 15,
+      "eval_s": 4.441,
+      "tok_s": 3.38
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "fastpath": true,
+      "cases": "holdout",
+      "path": "llm",
+      "run": 1,
+      "text": "Leg die Liste Sommerhits auf",
+      "note": "claude unübliches Verb",
+      "expected": {
+        "action": "spotify_play",
+        "playlist": "Sommerhits",
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "spotify_play",
+        "playlist": "Sommerhits"
+      },
+      "raw": {
+        "action": "spotify_play",
+        "playlist": "Sommerhits"
+      },
+      "wall_s": 6.196,
+      "load_s": 0.007,
+      "prompt_tokens": 479,
+      "prompt_s": 1.413,
+      "eval_tokens": 16,
+      "eval_s": 4.759,
+      "tok_s": 3.36
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "fastpath": true,
+      "cases": "holdout",
+      "path": "rules",
+      "run": 1,
+      "text": "Timer auf drei Minuten",
+      "note": "claude",
+      "expected": {
+        "action": "timer_start",
+        "playlist": null,
+        "minutes": 3
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "timer_start",
+        "minutes": 3
+      },
+      "raw": {
+        "action": "timer_start",
+        "playlist": null,
+        "minutes": 3
+      },
+      "wall_s": 0.0008,
+      "load_s": 0.0,
+      "prompt_tokens": 0,
+      "prompt_s": 0.0,
+      "eval_tokens": 0,
+      "eval_s": 0.0,
+      "tok_s": null
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "fastpath": true,
+      "cases": "holdout",
+      "path": "rules",
+      "run": 1,
+      "text": "Stell den Wecker auf achtundfünfzig Minuten",
+      "note": "claude Zahlwort",
+      "expected": {
+        "action": "timer_start",
+        "playlist": null,
+        "minutes": 58
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "timer_start",
+        "minutes": 58
+      },
+      "raw": {
+        "action": "timer_start",
+        "playlist": null,
+        "minutes": 58
+      },
+      "wall_s": 0.0001,
+      "load_s": 0.0,
+      "prompt_tokens": 0,
+      "prompt_s": 0.0,
+      "eval_tokens": 0,
+      "eval_s": 0.0,
+      "tok_s": null
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "fastpath": true,
+      "cases": "holdout",
+      "path": "llm",
+      "run": 1,
+      "text": "Erinnere mich in zwanzig Minuten",
+      "note": "claude Erinnerung als Timer",
+      "expected": {
+        "action": "timer_start",
+        "playlist": null,
+        "minutes": 20
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "timer_start",
+        "minutes": 20
+      },
+      "raw": {
+        "action": "timer_start",
+        "duration": "zwanzig Minuten"
+      },
+      "wall_s": 6.844,
+      "load_s": 0.002,
+      "prompt_tokens": 482,
+      "prompt_s": 1.738,
+      "eval_tokens": 17,
+      "eval_s": 5.077,
+      "tok_s": 3.35
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "fastpath": true,
+      "cases": "holdout",
+      "path": "rules",
+      "run": 1,
+      "text": "Timer für eine halbe Stunde",
+      "note": "claude",
+      "expected": {
+        "action": "timer_start",
+        "playlist": null,
+        "minutes": 30
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "timer_start",
+        "minutes": 30
+      },
+      "raw": {
+        "action": "timer_start",
+        "playlist": null,
+        "minutes": 30
+      },
+      "wall_s": 0.0001,
+      "load_s": 0.0,
+      "prompt_tokens": 0,
+      "prompt_s": 0.0,
+      "eval_tokens": 0,
+      "eval_s": 0.0,
+      "tok_s": null
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "fastpath": true,
+      "cases": "holdout",
+      "path": "rules",
+      "run": 1,
+      "text": "Timer neunzig Minuten",
+      "note": "claude",
+      "expected": {
+        "action": "timer_start",
+        "playlist": null,
+        "minutes": 90
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "timer_start",
+        "minutes": 90
+      },
+      "raw": {
+        "action": "timer_start",
+        "playlist": null,
+        "minutes": 90
+      },
+      "wall_s": 0.0001,
+      "load_s": 0.0,
+      "prompt_tokens": 0,
+      "prompt_s": 0.0,
+      "eval_tokens": 0,
+      "eval_s": 0.0,
+      "tok_s": null
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "fastpath": true,
+      "cases": "holdout",
+      "path": "llm",
+      "run": 1,
+      "text": "Eieruhr auf sieben Minuten",
+      "note": "claude unbekanntes Objektwort",
+      "expected": {
+        "action": "timer_start",
+        "playlist": null,
+        "minutes": 7
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "timer_start",
+        "minutes": 7
+      },
+      "raw": {
+        "action": "timer_start",
+        "duration": "sieben Minuten"
+      },
+      "wall_s": 6.391,
+      "load_s": 0.003,
+      "prompt_tokens": 481,
+      "prompt_s": 1.611,
+      "eval_tokens": 16,
+      "eval_s": 4.758,
+      "tok_s": 3.36
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "fastpath": true,
+      "cases": "holdout",
+      "path": "llm",
+      "run": 1,
+      "text": "Mach die Musik leiser",
+      "note": "claude keine Lautstärke-Aktion",
+      "expected": {
+        "action": "unknown",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "unknown"
+      },
+      "raw": {
+        "action": "unknown"
+      },
+      "wall_s": 3.325,
+      "load_s": 0.002,
+      "prompt_tokens": 479,
+      "prompt_s": 1.404,
+      "eval_tokens": 7,
+      "eval_s": 1.901,
+      "tok_s": 3.68
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "fastpath": true,
+      "cases": "holdout",
+      "path": "llm",
+      "run": 1,
+      "text": "Wie spät ist es",
+      "note": "claude",
+      "expected": {
+        "action": "unknown",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": true,
+      "full_ok": true,
+      "got": {
+        "action": "unknown"
+      },
+      "raw": {
+        "action": "unknown"
+      },
+      "wall_s": 3.232,
+      "load_s": 0.003,
+      "prompt_tokens": 478,
+      "prompt_s": 1.3,
+      "eval_tokens": 7,
+      "eval_s": 1.909,
+      "tok_s": 3.67
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "fastpath": true,
+      "cases": "holdout",
+      "path": "llm",
+      "run": 1,
+      "text": "Was läuft gerade auf Spotify",
+      "note": "claude Frage statt Befehl",
+      "expected": {
+        "action": "unknown",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": false,
+      "full_ok": false,
+      "got": {
+        "action": "spotify_play"
+      },
+      "raw": {
+        "action": "spotify_play"
+      },
+      "wall_s": 3.633,
+      "load_s": 0.002,
+      "prompt_tokens": 479,
+      "prompt_s": 1.402,
+      "eval_tokens": 8,
+      "eval_s": 2.212,
+      "tok_s": 3.62
+    },
+    {
+      "label": "pi4",
+      "model": "qwen2.5:1.5b",
+      "prompt": "v2",
+      "fastpath": true,
+      "cases": "holdout",
+      "path": "llm",
+      "run": 1,
+      "text": "Stopp den Timer",
+      "note": "claude keine Abbrechen-Aktion",
+      "expected": {
+        "action": "unknown",
+        "playlist": null,
+        "minutes": null
+      },
+      "valid": true,
+      "action_ok": false,
+      "full_ok": false,
+      "got": {
+        "action": "timer_start",
+        "minutes": 1
+      },
+      "raw": {
+        "action": "timer_start",
+        "duration": "einen Timer"
+      },
+      "wall_s": 5.954,
+      "load_s": 0.002,
+      "prompt_tokens": 477,
+      "prompt_s": 1.18,
+      "eval_tokens": 16,
+      "eval_s": 4.751,
+      "tok_s": 3.37
+    }
+  ]
+}
