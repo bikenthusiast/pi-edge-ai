@@ -1,0 +1,32 @@
+# Testsätze für Jarvis (Holdout 1). Stand: nach dem ersten Lauf am 18.11. zum Nachbessern verwendet,
+# also inzwischen "gesehen" – für den endgültigen Nachweis einen frischen Satz anlegen (z. B. Vosk-Mitschriften).
+# Spalten: text;action;playlist;minutes;quelle;notiz
+# action: spotify_play | spotify_pause | spotify_now_playing | lamp_on | lamp_off | timer_start | timer_stop | unknown
+# playlist/minutes leer lassen, wenn nicht zutreffend. Eigene Sätze mit quelle=tobi ergänzen.
+text;action;playlist;minutes;quelle;notiz
+Jarvis mach mal das Licht an;lamp_on;;;claude;Anrede
+Licht ausschalten;lamp_off;;;claude;
+Kannst du die Lampe bitte einschalten;lamp_on;;;claude;Frageform
+Mach das Licht wieder aus;lamp_off;;;claude;
+Mach es hell;lamp_on;;;claude;ohne Objekt
+licht and;lamp_on;;;claude;Erkennungsfehler an->and
+Musik weiter;spotify_play;;;claude;
+Spiel was auf Spotify;spotify_play;;;claude;
+Halt die Musik an;spotify_pause;;;claude;getrenntes Verb anhalten
+Spotify aus;spotify_pause;;;claude;
+Lass die Musik laufen;spotify_play;;;claude;
+Spiel die Playlist Feierabend ab;spotify_play;Feierabend;;claude;
+Feierabend Musik bitte;spotify_play;Feierabend;;claude;ohne Playlist-Wort
+spiel die play liste feier abend;spotify_play;Feierabend;;claude;Erkennungsfehler getrennte Wörter
+Spiel meine Playlist Chill am Abend;spotify_play;Chill am Abend;;claude;unbekannte dreiteilige Playlist
+Leg die Liste Sommerhits auf;spotify_play;Sommerhits;;claude;unübliches Verb
+Timer auf drei Minuten;timer_start;;3;claude;
+Stell den Wecker auf achtundfünfzig Minuten;timer_start;;58;claude;Zahlwort
+Erinnere mich in zwanzig Minuten;timer_start;;20;claude;Erinnerung als Timer
+Timer für eine halbe Stunde;timer_start;;30;claude;
+Timer neunzig Minuten;timer_start;;90;claude;
+Eieruhr auf sieben Minuten;timer_start;;7;claude;unbekanntes Objektwort
+Mach die Musik leiser;unknown;;;claude;keine Lautstärke-Aktion
+Wie spät ist es;unknown;;;claude;
+Was läuft gerade auf Spotify;spotify_now_playing;;;claude;Frage nach aktuellem Titel
+Stopp den Timer;timer_stop;;;claude;
